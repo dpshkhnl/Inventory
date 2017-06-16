@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/inventory">
+  <Resource auth="Container" driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver" maxActive="20" maxIdle="10" maxWait="-1" name="simple_account" password="magnus" type="javax.sql.DataSource" url="jdbc:sqlserver://;databaseName=simple_Account" username="sa"/>
+</Context>

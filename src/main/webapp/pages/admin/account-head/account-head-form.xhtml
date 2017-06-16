@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
+                template="#{layoutMB.layout}">
+
+    <ui:define name="title">
+       Account Head Form
+    </ui:define>
+
+    <ui:define name="body">
+        <f:metadata>
+            <f:viewParam name="id" value="#{accountHeadMB.accHead.accHeadId}" converter="javax.faces.Long"/>
+            <!-- use view action if you are in a Java EE 7 server: <f:viewAction action="#{carFormMB.init()}"/>-->
+            <f:event type="preRenderView" listener="#{accountHeadMB.init}"/>
+        </f:metadata>
+
+        <adm:breadcrumb title="#{empty accountHeadMB.accHead.accHeadId ? 'New Account Head' : 'Update Account Head :'}" link="account-head-form.xhtml?id=#{accountHeadMB.accHead.accHeadId}"/>
+        <h:form id="form" prependId="false">
+            <p:focus rendered="#{empty accountHeadMB.accHead.accHeadId}"/>
+
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Save" action="#{accountHeadMB.saveAccountHead()}" update="@form"
+                                         icon="fa fa-check" styleClass="btn-primary"/>
+                        <p:spacer width="5" rendered="#{accountHeadMB.isNew()}"/>
+                        <p:commandButton value="Clear" action="#{accountHeadMB.clear}" process="@this"
+                                         icon="fa fa-refresh" styleClass="btn-success"
+                                         update="@form" rendered="#{accountHeadMB.isNew()}" resetValues="true"/>
+                        <p:spacer width="5" rendered="#{not accountHeadMB.isNew()}"/>
+
+                        <p:commandButton value="Delete" action="#{accountHeadMB.remove}" process="@this"
+                                         rendered="#{not accountHeadMB.isNew()}" icon="fa fa-trash"
+                                         styleClass="btn-danger">
+                            <f:setPropertyActionListener value="true"
+                                                         target="#{facesContext.externalContext.flash.keepMessages}"/>
+                            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>
+                        </p:commandButton>
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Back" immediate="true"
+                                         action="account-head-list?faces-redirect=true"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+                    </div>
+                    <p:splitButton value="Save" action="#{accountHeadMB.saveAccountHead}" update="@form"
+                                   icon="fa fa-check"
+                                   styleClass="hidden-md hidden-lg btn-primary">
+                        <p:menuitem value="Reset" action="#{accountHeadMB.clear}"
+                                    process="@this" update="@form" rendered="#{accountHeadMB.isNew()}"
+                                    resetValues="true" icon="fa fa-refresh"/>
+                        <p:menuitem value="Delete" action="#{accountHeadMB.remove}" process="@this"
+                                    rendered="#{not accountHeadMB.isNew()}" icon="fa fa-trash"
+                                 >
+                            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>
+                        </p:menuitem>
+                        <p:separator/>
+                        <p:menuitem value="Back" action="account-head-list?faces-redirect=true"
+                                    process="@this" immediate="true"
+                                    icon="fa fa-close"/>
+                    </p:splitButton>
+
+                    <p:separator/>
+
+                    <div class="ui-g ui-fluid">
+                        <div class="ui-g-12">
+                            <p:outputLabel for="accCode" value="Account Code"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText id="accCode" value="#{accountHeadMB.accHead.accCode}" 
+                                          />
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Account Name:" for="accName"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText id="accName" value="#{accountHeadMB.accHead.accName}"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Alias" for="alias"/>
+                        </div>
+                        <div class="ui-g-12">
+                          <p:inputText id="alias" value="#{accountHeadMB.accHead.alias}"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Opening Balance:" for="openBalance"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputNumber id="openBalance" value="#{accountHeadMB.accHead.minBal}"/>
+                        </div>
+                        
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Account Type:" for="accType"/>
+                        </div>
+                        <div class="ui-g-12">
+                           
+                            <p:selectOneMenu class="form-data-value font-1 input-width-90 required" id="accType" value="#{accountHeadMB.accHead.accType}">   
+                                <f:selectItem  itemLabel="Select" itemValue="0" />
+                                <f:selectItem  itemLabel="Receivable" itemValue="1" />
+                                <f:selectItem  itemLabel="Payable" itemValue="2" />
+                                <f:selectItem  itemLabel="Current Liabilities" itemValue="3" />
+                                <f:selectItem  itemLabel="Income" itemValue="4" />
+                                <f:selectItem  itemLabel="Bank and Cash" itemValue="5" />
+                                <f:selectItem  itemLabel="Current Assets" itemValue="6" />
+                                <f:selectItem  itemLabel="Expenses" itemValue="7" />
+                                
+                            </p:selectOneMenu>
+                        </div>
+                       <div class="ui-g-12">
+                            <p:outputLabel value="Remarks" for="remarks"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText id="remarks" value="#{accountHeadMB.accHead.remarks}"/>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger">
+                <p:commandButton value="Yes" type="button" styleClass="btn-primary ui-confirmdialog-yes"
+                                 icon="fa fa-check"/>
+                <p:commandButton value="No" type="button" styleClass="btn-danger ui-confirmdialog-no"
+                                 icon="fa fa-close"/>
+            </p:confirmDialog>
+        </h:form>
+
+
+    </ui:define>
+
+</ui:composition>

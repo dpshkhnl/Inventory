@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
+                template="#{layoutMB.layout}">
+
+    <ui:define name="title">
+       Vat Setting
+    </ui:define>
+
+    <ui:define name="body">
+        
+
+        <adm:breadcrumb title="Vat Setting"/>
+        <h:form id="form" prependId="false">
+
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Save" action="#{taxSettingMB.saveVatSetting()}" update="@form"
+                                         icon="fa fa-check" styleClass="btn-primary"/>
+                      
+                    <p:separator/>
+
+                    <div class="ui-g ui-fluid">
+                        <div class="ui-g-12">
+                            <p:outputLabel for="PurchaseAcc" value="Purchase Account"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:selectOneMenu class="form-data-value font-1 input-width-90 required" id="PurchaseAcc" value="#{taxSettingMB.masterVATModel.purchaseAccount.accHeadId}">   
+                                <f:selectItem  itemLabel="Select" itemValue="0" />
+                                <f:selectItems  value="#{taxSettingMB.accHeads}" var="acc" itemLabel="#{acc.accName}(#{acc.accCode})" itemValue="#{acc.accHeadId}" />
+                                
+                                
+                            </p:selectOneMenu>
+                           
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Sale Account:" for="saleAcc"/>
+                        </div>
+                        <div class="ui-g-12">
+                           <p:selectOneMenu class="form-data-value font-1 input-width-90 required" 
+                                            id="saleAcc" value="#{taxSettingMB.masterVATModel.salesAccount.accHeadId}">   
+                                <f:selectItem  itemLabel="Select" itemValue="0" />
+                                <f:selectItems  value="#{taxSettingMB.accHeads}" var="acc" itemLabel="#{acc.accName}(#{acc.accCode})" itemValue="#{acc.accHeadId}" />
+                                
+                                
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Percentage" for="percent"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText id="percent" value="#{taxSettingMB.masterVATModel.vatPercent}"/>
+                        </div>
+                        
+                        
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Service Charge Account" for="servAcc"/>
+                        </div>
+                        <div class="ui-g-12">
+                           
+                              <p:selectOneMenu class="form-data-value font-1 input-width-90 required" 
+                                               id="servAcc" value="#{taxSettingMB.masterVATModel.serviceChargeAccount.accHeadId}">   
+                                <f:selectItem  itemLabel="Select" itemValue="0" />
+                                <f:selectItems  value="#{taxSettingMB.accHeads}" var="acc" itemLabel="#{acc.accName}(#{acc.accCode})" itemValue="#{acc.accHeadId}" />
+                                
+                                
+                            </p:selectOneMenu>
+                        </div>
+                       <div class="ui-g-12">
+                            <p:outputLabel value="Service Charge(%)" for="servPer"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText id="servPer" value="#{taxSettingMB.masterVATModel.serviceChargePercent}"/>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </h:form>
+
+
+    </ui:define>
+
+</ui:composition>
