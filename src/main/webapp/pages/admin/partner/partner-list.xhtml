@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:adm="http://github.com/adminfaces"
+                template="#{layoutMB.layout}">
+
+    <ui:define name="head-end">
+        <style type="text/css">
+            .ui-datatable .ui-datatable-header {
+                text-align: right !important;
+            }
+
+        </style>
+    </ui:define>
+
+    <ui:define name="title">
+        Customer/Supplier
+    </ui:define>
+
+    <ui:define name="description">
+        
+    </ui:define>
+
+    <ui:define name="body">
+        <adm:breadcrumb title="Partner List"/>
+
+        <h:form>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton action="partner-form?faces-redirect=true" icon="fa fa-plus"
+                                         value="New" styleClass="btn-primary"/>
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Delete Selected" icon="fa fa-trash" styleClass="btn-danger"
+                                         action="#{partnerMB.delete}"
+                                         disabled="#{empty partnerMB.selectedValue or partnerMB.selectedValue .size() == 0}"
+                                         process="@this" update="@form"
+                        >
+                            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>
+                        </p:commandButton>
+                        <p:spacer width="5"/>
+           <p:commandButton value="View selected" update="@(.ui-dialog)" styleClass="btn-info"
+                                         disabled="#{empty partnerMB.selectedValue  or partnerMB.selectedValue  == 0}"
+                                         oncomplete="PF('selectedCars').show()" icon="fa fa-search"/>
+                    </div>
+
+                    <p:splitButton value="New" action="partner-form?faces-redirect=true"
+                                   icon="fa fa-plus"
+                                   styleClass="hidden-md hidden-lg btn-primary">
+                        <p:menuitem value="Delete Selected" action="#{partnerMB.delete}"
+                                    process="@this" update="@form"
+                                    disabled="#{empty partnerMB.selectedValue or partnerMB.selectedValue.size() == 0}"
+                                    icon="fa fa-trash">
+                            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>
+                        </p:menuitem>
+                        <p:menuitem value="View selected" update="@(.ui-dialog)"
+                                    oncomplete="PF('selectedCars').show()"
+                                    disabled="#{empty partnerMB.selectedValue or partnerMB.selectedValue.size() == 0}"
+                                    icon="fa fa-search"
+                        />
+                    </p:splitButton>
+
+                    <p:separator/>
+                    <p:dataTable widgetVar="carsTable" var="c" value="#{partnerMB.lsPartnerModels}" rows="5"
+                                 rowKey="#{c.id}" lazy="true" paginator="true"
+                                 filteredValue="#{partnerMB.filteredValue}"
+                                 paginatorPosition="bottom" selection="#{partnerMB.selectedValue}"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
+                                 currentPageReportTemplate="[ {startRecord} to {endRecord} of {totalRecords} ]"
+                                 rowsPerPageTemplate="5,10,15,20,30"
+                            >
+
+                        <p:ajax event="rowSelectCheckbox" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowUnselectCheckbox" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
+
+
+                        <f:facet name="header">
+                            Find partner by ID <p:inputText id="inptId" value="#{partnerMB.partnerModel.id}"/>
+                            <p:spacer height="5"/>
+                            <p:commandButton id="brFind"
+                                             value="Find"
+                                             action="#{partnerMB.findPartnerById(partnerMB.partnerModel.id)}"
+                                             process="@form"
+                                             update="@form"
+                                             styleClass="btn-flat bg-black"
+                                             partialSubmit="true"/>
+                        </f:facet>
+                        <p:column selectionMode="multiple" width="5%" styleClass="align-center"/>
+
+                        <p:column headerText="Name" filterBy="#{c.memberName}" sortBy="#{c.memberName}"
+                                  filterMatchMode="contains">
+                            <f:facet name="filter">
+
+                            </f:facet>
+                            <p:link value="#{c.memberName}" outcome="partner-form.xhtml" >
+                                <f:param name="id" value="#{c.id}"/>
+                            </p:link>
+
+                        </p:column>
+                        <p:column headerText="Address" sortBy="#{c.memberAddress}" filterBy="#{c.memberAddress}">
+                            
+                            #{c.memberAddress}
+                        </p:column>
+                        <p:column headerText="Contact Person" sortBy="#{c.contactPerson}" filterBy="#{c.contactPerson}">
+                            
+                            #{c.contactPerson}
+                        </p:column>
+                        <p:column headerText="Contact No" sortBy="#{c.memberContactNo}" >
+                            
+                            #{c.memberContactNo}
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger">
+                <p:commandButton value="Yes" type="button" styleClass="btn-primary ui-confirmdialog-yes"
+                                 icon="fa fa-check"/>
+                <p:commandButton value="No" type="button" styleClass="btn-danger ui-confirmdialog-no"
+                                 icon="fa fa-close"/>
+            </p:confirmDialog>
+        </h:form>
+
+
+
+        <p:dialog header="Selected Routes" widgetVar="selectedCars" height="250"
+                  width="400" responsive="true" styleClass="box-success">
+            <p:dataList id="selectedCarsList" value="#{partnerMB.selectedValue}" var="partner"
+                        type="definition">
+                ID: #{partner.id} - Name: #{partner.memberName} 
+            </p:dataList>
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>

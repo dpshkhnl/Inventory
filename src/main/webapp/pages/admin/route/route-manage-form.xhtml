@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
+                template="#{layoutMB.layout}">
+
+    <ui:define name="title">
+       Routes
+    </ui:define>
+
+    <ui:define name="body">
+        <f:metadata>
+            <f:viewParam name="id" value="#{routeMB.routeManagementModel.branchId}" converter="javax.faces.Long"/>
+            <!-- use view action if you are in a Java EE 7 server: <f:viewAction action="#{routeMB.init()}"/>-->
+            <f:event type="preRenderView" listener="#{routeMB.init}"/>
+        </f:metadata>
+
+        <adm:breadcrumb title="#{empty routeMB.routeManagementModel.branchId ? 'New Route' : 'Update Route:'}" link="route-manage-form.xhtml?id=#{routeMB.routeManagementModel.branchId}"/>
+        <h:form id="form" prependId="false">
+            <p:focus rendered="#{empty routeMB.routeManagementModel.branchId}"/>
+
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton value="Save" action="#{routeMB.saveRoute()}" update="@form"
+                                         icon="fa fa-check" styleClass="btn-primary"/>
+                        <p:spacer width="5" rendered="#{routeMB.isNew()}"/>
+                        <p:commandButton value="Clear" action="#{routeMB.clear}" process="@this"
+                                         icon="fa fa-refresh" styleClass="btn-success"
+                                         update="@form" rendered="#{routeMB.isNew()}" resetValues="true"/>
+                        <p:spacer width="5" rendered="#{not routeMB.isNew()}"/>
+
+                        <p:commandButton value="Delete" action="#{routeMB.remove}" process="@this"
+                                         rendered="#{not routeMB.isNew()}" icon="fa fa-trash"
+                                         styleClass="btn-danger">
+                            <f:setPropertyActionListener value="true"
+                                                         target="#{facesContext.externalContext.flash.keepMessages}"/>
+                            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>
+                        </p:commandButton>
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Back" immediate="true"
+                                         action="route-list?faces-redirect=true"
+                                         process="@this"
+                                         icon="fa fa-close"/>
+                    </div>
+                    <p:splitButton value="Save" action="#{routeMB.saveRoute()}" update="@form"
+                                   icon="fa fa-check"
+                                   styleClass="hidden-md hidden-lg btn-primary">
+                        <p:menuitem value="Reset" action="#{routeMB.clear}"
+                                    process="@this" update="@form" rendered="#{routeMB.isNew()}"
+                                    resetValues="true" icon="fa fa-refresh"/>
+                        <p:menuitem value="Delete" action="#{routeMB.remove}" process="@this"
+                                    rendered="#{not routeMB.isNew()}" icon="fa fa-trash"
+                                 >
+                            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>
+                        </p:menuitem>
+                        <p:separator/>
+                        <p:menuitem value="Back" action="route-list?faces-redirect=true"
+                                    process="@this" immediate="true"
+                                    icon="fa fa-close"/>
+                    </p:splitButton>
+
+                    <p:separator/>
+
+                    <div class="ui-g ui-fluid">
+                        <div class="ui-g-12">
+                            <p:outputLabel for="routeName" value="Route Name"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText id="routeName" value="#{routeMB.routeManagementModel.branchName}" 
+                                          />
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Location:" for="location"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText id="location" value="#{routeMB.routeManagementModel.branchLocation}"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Contact Person" for="person"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText id="person" value="#{routeMB.routeManagementModel.contactPerson}"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:outputLabel value="Contact No:" for="contactNo"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText id="contactNo" value="#{routeMB.routeManagementModel.contactNumber}"/>
+                        </div>
+                        
+                      <div class="ui-g-12">
+                             <p:outputLabel value="Remarks" for="remarks"/>
+                        </div>
+                           
+                            <div class="ui-g-12">
+                            <p:inputText id="remarks" value="#{routeMB.routeManagementModel.remarks}"/>
+                        </div>
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+            
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger">
+                <p:commandButton value="Yes" type="button" styleClass="btn-primary ui-confirmdialog-yes"
+                                 icon="fa fa-check"/>
+                <p:commandButton value="No" type="button" styleClass="btn-danger ui-confirmdialog-no"
+                                 icon="fa fa-close"/>
+            </p:confirmDialog>
+        </h:form>
+
+
+    </ui:define>
+
+</ui:composition>

@@ -16,7 +16,7 @@ public class LayoutMB implements Serializable {
 
     @PostConstruct
     public void init() {
-        setDefaultLayout();
+        setHorizontalLayout();
     }
 
     public String getLayout() {
