@@ -10,28 +10,28 @@
 
     <ui:define name="body">
         <f:metadata>
-            <f:viewParam name="id" value="#{unitSettingMB.unitModel.unitId}" converter="javax.faces.Long"/>
-            <!-- use view action if you are in a Java EE 7 server: <f:viewAction action="#{unitSettingMB.init()}"/>-->
-            <f:event type="preRenderView" listener="#{unitSettingMB.init}"/>
+            <f:viewParam name="id" value="#{brandNameMB.brandName.brandNameId}" converter="javax.faces.Long"/>
+            <!-- use view action if you are in a Java EE 7 server: <f:viewAction action="#{brandNameMB.init()}"/>-->
+            <f:event type="preRenderView" listener="#{brandNameMB.init}"/>
         </f:metadata>
 
-        <adm:breadcrumb title="#{empty unitSettingMB.unitModel.unitId ? 'New Unit' : 'Update Unit:'}" link="unit-setting-form.xhtml?id=#{unitSettingMB.unitModel.unitId}"/>
+        <adm:breadcrumb title="#{empty brandNameMB.brandName.brandNameId ? 'New Unit' : 'Update Unit:'}" link="unit-setting-form.xhtml?id=#{brandNameMB.brandName.brandNameId}"/>
         <h:form id="form" prependId="false">
-            <p:focus rendered="#{empty unitSettingMB.unitModel.unitId}"/>
+            <p:focus rendered="#{empty brandNameMB.brandName.brandNameId}"/>
 
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <div id="main-buttons" class="hidden-sm hidden-xs">
-                        <p:commandButton value="Save" action="#{unitSettingMB.saveRoute()}" update="@form"
+                        <p:commandButton value="Save" action="#{brandNameMB.save()}" update="@form"
                                          icon="fa fa-check" styleClass="btn-primary"/>
-                        <p:spacer width="5" rendered="#{unitSettingMB.isNew()}"/>
-                        <p:commandButton value="Clear" action="#{unitSettingMB.clear}" process="@this"
+                        <p:spacer width="5" rendered="#{brandNameMB.isNew()}"/>
+                        <p:commandButton value="Clear" action="#{brandNameMB.clear}" process="@this"
                                          icon="fa fa-refresh" styleClass="btn-success"
-                                         update="@form" rendered="#{unitSettingMB.isNew()}" resetValues="true"/>
-                        <p:spacer width="5" rendered="#{not unitSettingMB.isNew()}"/>
+                                         update="@form" rendered="#{brandNameMB.isNew()}" resetValues="true"/>
+                        <p:spacer width="5" rendered="#{not brandNameMB.isNew()}"/>
 
-                        <p:commandButton value="Delete" action="#{unitSettingMB.remove}" process="@this"
-                                         rendered="#{not unitSettingMB.isNew()}" icon="fa fa-trash"
+                        <p:commandButton value="Delete" action="#{brandNameMB.remove}" process="@this"
+                                         rendered="#{not brandNameMB.isNew()}" icon="fa fa-trash"
                                          styleClass="btn-danger">
                             <f:setPropertyActionListener value="true"
                                                          target="#{facesContext.externalContext.flash.keepMessages}"/>
@@ -39,23 +39,23 @@
                         </p:commandButton>
                         <p:spacer width="5"/>
                         <p:commandButton value="Back" immediate="true"
-                                         action="unit-setting-list?faces-redirect=true"
+                                         action="brand-name-list?faces-redirect=true"
                                          process="@this"
                                          icon="fa fa-close"/>
                     </div>
-                    <p:splitButton value="Save" action="#{unitSettingMB.saveRoute()}" update="@form"
+                    <p:splitButton value="Save" action="#{brandNameMB.save()}" update="@form"
                                    icon="fa fa-check"
                                    styleClass="hidden-md hidden-lg btn-primary">
-                        <p:menuitem value="Reset" action="#{unitSettingMB.clear}"
-                                    process="@this" update="@form" rendered="#{unitSettingMB.isNew()}"
+                        <p:menuitem value="Reset" action="#{brandNameMB.clear}"
+                                    process="@this" update="@form" rendered="#{brandNameMB.isNew()}"
                                     resetValues="true" icon="fa fa-refresh"/>
-                        <p:menuitem value="Delete" action="#{unitSettingMB.remove}" process="@this"
-                                    rendered="#{not unitSettingMB.isNew()}" icon="fa fa-trash"
+                        <p:menuitem value="Delete" action="#{brandNameMB.remove}" process="@this"
+                                    rendered="#{not brandNameMB.isNew()}" icon="fa fa-trash"
                                  >
                             <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>
                         </p:menuitem>
                         <p:separator/>
-                        <p:menuitem value="Back" action="unit-setting-list?faces-redirect=true"
+                        <p:menuitem value="Back" action="brand-name-list?faces-redirect=true"
                                     process="@this" immediate="true"
                                     icon="fa fa-close"/>
                     </p:splitButton>
@@ -64,40 +64,21 @@
 
                     <div class="ui-g ui-fluid">
                         <div class="ui-g-12">
-                            <p:outputLabel for="unitName" value="Unit Name"/>
+                            <p:outputLabel for="unitName" value="Brand Name"/>
                         </div>
                         <div class="ui-g-12">
-                            <p:inputText id="unitName" value="#{unitSettingMB.unitModel.unitName}" 
+                            <p:inputText id="unitName" value="#{brandNameMB.brandName.brandName}" 
                                           />
-                        </div>
-                        <div class="ui-g-12">
-                                <p:selectBooleanCheckbox itemLabel ="Primary Unit Type" id="chkCustomer" />
-                               
                         </div>
                         <div class="ui-g-12">
                             <p:outputLabel value="Remarks" for="remarks"/>
                         </div>
                         
-                         
-                           
-                            
                         <div class="ui-g-12">
-                            <p:inputText id="remarks" value="#{unitSettingMB.unitModel.remarks}"/>
+                            <p:inputText id="remarks" value="#{brandNameMB.brandName.brandDescription}"/>
                         </div>
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Parent Unit" for="parentUnit"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:inputText id="parentUnit" value="#{unitSettingMB.unitModel.parentUnitId}"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Count:" for="count"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:inputText id="count" value="#{unitSettingMB.unitModel.unitCount}"/>
-                        </div>
+                   
                         
-                    
                         </div>
                         
                         
