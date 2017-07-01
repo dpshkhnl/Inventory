@@ -5,6 +5,8 @@
  */
 package np.info.dpshkhnl.service.admin;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import np.info.dpshkhnl.model.admin.UnitModel;
 import np.info.dpshkhnl.service.core.GenericDAO;
@@ -18,5 +20,35 @@ public class UnitSettingEJB extends GenericDAO<UnitModel> {
 	public UnitSettingEJB() {
 		super(UnitModel.class);
 }
-    
+    private List<UnitModel> parentUnitLst = new ArrayList<>();
+        public int getUnitCountOfAllParent(UnitModel unitModel) {
+		int unitCount = unitModel.getUnitCount();
+		List<UnitModel> parentLst = this.getAllParentUnit(unitModel
+				.getUnitId());
+
+		if (parentLst.size() > 0) {
+			UnitModel unitObj;
+			for (UnitModel comboBoxDataModel : parentLst) {
+				unitObj = this.find(comboBoxDataModel.getUnitId());
+				unitCount *= unitObj.getUnitCount();
+			}
+		}
+
+		return unitCount;
+	}
+        
+        public List<UnitModel> getAllParentUnit(int unitId) {
+		UnitModel parentUnit = super.find(unitId);
+		UnitModel comboModle;
+		if (parentUnit.getParentUnitId() == 0) {
+			return parentUnitLst;
+		} else {
+			comboModle = new UnitModel();
+			comboModle.setUnitId(parentUnit.getParentUnitId());
+			
+			parentUnitLst.add(comboModle);
+			getAllParentUnit(parentUnit.getParentUnitId());
+		}
+		return parentUnitLst;
+	}
 }
