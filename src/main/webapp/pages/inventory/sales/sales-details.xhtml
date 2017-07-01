@@ -5,7 +5,7 @@
                 template="#{layoutMB.layout}">
 
     <ui:define name="title">
-        Purchase Details
+        Sales Details
     </ui:define>
 
     <ui:define name="body">
@@ -24,64 +24,64 @@
       
                       <p:outputLabel for="supplier"  value="Supplier Name:"/>
                             
-                            <p:selectOneMenu filter="true" filterMatchMode="contains" styleClass="form-control" id="supplier" value="#{purchaseMB.inventoryInvoiceModel.supId.id}">   
+                            <p:selectOneMenu filter="true" filterMatchMode="contains" styleClass="form-control" id="supplier" value="#{salesMB.inventoryReceiptModel.supId.id}">   
                                 <f:selectItem  itemLabel="Select" itemValue="0" />
-                                <f:selectItems value="#{purchaseMB.lstSupModels}" var="sup" itemLabel="#{sup.memberName}" itemValue="#{sup.id}" />
+                                <f:selectItems value="#{salesMB.lstSupModels}" var="sup" itemLabel="#{sup.memberName}" itemValue="#{sup.id}" />
                                  <p:outputLabel for="status"  value="Status:"/> 
                             </p:selectOneMenu>
                       <p:outputLabel for="status"  value="Status:"/>
-                      <p:selectOneMenu  styleClass="form-control" id="status" value="#{purchaseMB.status.cvId}">   
+                      <p:selectOneMenu  styleClass="form-control" id="status" value="#{salesMB.status.cvId}">   
                                 <f:selectItem  itemLabel="All" itemValue="0" />
-                                <f:selectItems value="#{purchaseMB.lstStatus}" var="status" itemLabel="#{status.cvLbl}" itemValue="#{status.cvId}" />
+                                <f:selectItems value="#{salesMB.lstStatus}" var="status" itemLabel="#{status.cvLbl}" itemValue="#{status.cvId}" />
                                 
                             </p:selectOneMenu>
                       
                       
                     
-                            <p:commandButton value="Load" action="#{purchaseMB.loadInvoicesByCustomer}" update="@form"
+                            <p:commandButton value="Load" action="#{salesMB.loadIReceiptByCustomer}" update="@form"
                                          icon="fa fa-plus" styleClass="btn-primary"/>
                             
-                            <p:dataTable  var="invoice" value="#{purchaseMB.lstInvoice}" rows="5"
-                                         rowKey="#{invoice.invId}" lazy="true" paginator="true"
-                                  paginatorPosition="bottom" selection="#{purchaseMB.selectedInvoice}"
+                            <p:dataTable  var="receipt" value="#{salesMB.lstReceiptModels}" rows="5"
+                                         rowKey="#{receipt.receiptId}" lazy="true" paginator="true"
+                                  paginatorPosition="bottom" selection="#{salesMB.selectedReceipts}"
                                   rowIndexVar="rowsn"
                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
                                  currentPageReportTemplate="[ {startRecord} to {endRecord} of {totalRecords} ]"
                                  rowsPerPageTemplate="5,10,15,20,30"
                             >
 
-                        <p:ajax event="rowSelectCheckbox" listener="#{purchaseMB.loadPurchaseDetails}" update="@form @(.ui-button, .ui-confirm-dialog)"/>
-                        <p:ajax event="rowUnselectCheckbox" listener="#{purchaseMB.loadPurchaseDetails}" update="@form @(.ui-button, .ui-confirm-dialog)"/>
-                        <p:ajax event="rowSelect" listener="#{purchaseMB.loadPurchaseDetails}" update="@form @(.ui-button, .ui-confirm-dialog)"/>
-                        <p:ajax event="rowUnselect" listener="#{purchaseMB.loadPurchaseDetails}" update="@form @(.ui-button, .ui-confirm-dialog)"/>
+                                <p:ajax event="rowSelectCheckbox" listener="#{salesMB.loadsalesDetails()}" update="@form @(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowUnselectCheckbox" listener="#{salesMB.loadsalesDetails}" update="@form @(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowSelect" listener="#{salesMB.loadsalesDetails}" update="@form @(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowUnselect" listener="#{salesMB.loadsalesDetails}" update="@form @(.ui-button, .ui-confirm-dialog)"/>
 
                         <p:column selectionMode="multiple" width="5%" styleClass="align-center"/>
 
                         <p:column headerText="S.No" width="10%">
                          #{rowsn+1}
                         </p:column>
-                        <p:column headerText="Invoice Date" >
+                        <p:column headerText="Receipt Date" >
                             
-                            <h:outputText value="#{invoice.invDtEn}" >
+                            <h:outputText value="#{receipt.receiptDtEn}" >
                                 <f:convertDateTime pattern="yyyy-MM-dd" />
                             </h:outputText> 
                         </p:column>
-                        <p:column headerText="Invoice No" >
+                        <p:column headerText="Receipt No" >
                             
-                            #{invoice.invNo}
+                            #{receipt.receiptNo}
                         </p:column>
-                        <p:column headerText="Supplier Name" >
+                        <p:column headerText="Customer Name" >
                             
-                            #{invoice.supId.memberName}
+                            #{receipt.supId.memberName}
                         </p:column>
                         <p:column headerText="Total Amount" >
                             
-                            #{invoice.invAmt}
+                            #{receipt.receiptAmt}
                         </p:column>
                         
                          <p:column headerText="Status" >
          
-                            #{invoice.status.cvLbl}
+                            #{receipt.status.cvLbl}
                         </p:column>
                         
                          
@@ -89,15 +89,15 @@
                         
                     </div>
                     <div class="col-md-6">
-                         <p:dataTable  var="purchase" value="#{purchaseMB.lstPurchaseDet}" rows="5"
-                                    rowKey="#{purchase.invPurchaseId}" lazy="true" paginator="true"  rowIndexVar="rowsn"
-                                 paginatorPosition="bottom" selection="#{purchaseMB.selectedPurchaseDet}"
+                        <p:dataTable  var="sales" value="#{salesMB.lstSalesDetails}" rows="5"
+                                      rowKey="#{sales.invsaleId}" lazy="true" paginator="true"  rowIndexVar="rowsn"
+                                    paginatorPosition="bottom" selection="#{salesMB.selectedSalesDet}"
                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
                                  currentPageReportTemplate="[ {startRecord} to {endRecord} of {totalRecords} ]"
                                  rowsPerPageTemplate="5,10,15,20,30"
                             >
 
-                             <p:ajax event="rowSelectCheckbox" listener="#{purchaseMB.loadPurchaseDetails}" update="@(.ui-button, .ui-confirm-dialog)"/>
+                            <p:ajax event="rowSelectCheckbox" listener="#{salesMB.loadsalesDetails()}" update="@(.ui-button, .ui-confirm-dialog)"/>
                         <p:ajax event="rowUnselectCheckbox" update="@(.ui-button, .ui-confirm-dialog)"/>
                         <p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
                         <p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
@@ -110,24 +110,24 @@
                         </p:column>
                         <p:column headerText="Item Name" >
                             
-                            #{purchase.itemProductModel.productCode}
+                            #{sales.itemProductModel.productCode}
                         </p:column>
-                        <p:column headerText="Count" >
+                        <p:column headerText="Qunatity" >
                             
-                            #{purchase.inQty}
+                            #{sales.outQty}
                         </p:column>
                         
                          <p:column headerText="Unit" >
                             
-                            #{purchase.inQty}
+                            #{sales.outQty}
                         </p:column>
                         <p:column headerText="Unit Cost" >
                             
-                            #{purchase.perCost}
+                            #{sales.perCost}
                         </p:column>
                         <p:column headerText="Total Cost" >
                             
-                            #{purchase.totalCost}
+                            #{sales.totalCost}
                         </p:column>
                         
                          
@@ -139,19 +139,19 @@
                 </div>
                             <div class=" form-horizontal  ">
                             <p:outputLabel value="Total:" style="margin-left: 20px" for="total"/>
-                            <p:inputText id="total" disabled="true" style="margin-left: 20px" value="#{purchaseMB.total}"/>
+                            <p:inputText id="total" disabled="true" style="margin-left: 20px" value="#{salesMB.total}"/>
                             
                               
                             
                            <p:outputLabel value="VAT" style="margin-left: 20px"   for="vat"/>
                           
-                           <p:inputText id="vat" disabled="true" style="margin-left: 20px"  value="#{purchaseMB.vatAmt}"/>
+                           <p:inputText id="vat" disabled="true" style="margin-left: 20px"  value="#{salesMB.vatAmt}"/>
                              
                              <p:outputLabel value="Discount"  style="margin-left: 20px" for="discount"/>
                           
-                             <p:inputText id="discount" disabled="true" style="margin-left: 20px" value="#{purchaseMB.discountAmt}"/>
+                             <p:inputText id="discount" disabled="true" style="margin-left: 20px" value="#{salesMB.discountAmt}"/>
                              <p:outputLabel value="Grand Total:"  style="margin-left: 20px" for="gTotal"/>
-                             <p:inputText id="gTotal" disabled="true" style="margin-left: 20px"   value="#{purchaseMB.gTotal}"/>
+                             <p:inputText id="gTotal" disabled="true" style="margin-left: 20px"   value="#{salesMB.gTotal}"/>
                            
                     </div> 
             </div>

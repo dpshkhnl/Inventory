@@ -22,7 +22,7 @@
                         <p:fieldset legend="Supplier " >
                             <p:outputLabel for="supplier"  value="Supplier Name:"/>
 
-                            <p:selectOneMenu  styleClass="form-control" id="supplier" value="#{purchaseMB.inventoryInvoiceModel.supId.id}">   
+                            <p:selectOneMenu filter="true" filterMatchMode="contains" styleClass="form-control" id="supplier" value="#{purchaseMB.inventoryInvoiceModel.supId.id}">   
                                 <f:selectItem  itemLabel="Select" itemValue="0" />
                                 <f:selectItems value="#{purchaseMB.lstSupModels}" var="sup" itemLabel="#{sup.memberName}" itemValue="#{sup.id}" />
 
@@ -48,7 +48,7 @@
 
                                 <p:outputLabel for="itemCat" style="margin-left: 20px"   value="Item Category:"/>
 
-                                <p:selectOneMenu  style="margin-left: 20px" styleClass="form-control" id="itemCat" value="#{purchaseMB.catId}">   
+                                <p:selectOneMenu filter="true" filterMatchMode="contains" style="margin-left: 20px" styleClass="form-control" id="itemCat" value="#{purchaseMB.catId}">   
                                     <f:selectItem  itemLabel="Select" itemValue="0" />
                                     <f:selectItems value="#{purchaseMB.lstCat}" var="cat" itemLabel="#{cat.catName}" itemValue="#{cat.catId}" />
 
@@ -56,7 +56,7 @@
 
                                 <p:outputLabel for="itemName" style="margin-left: 20px"   value="Item:"/>
 
-                                <p:selectOneMenu  style="margin-left: 20px" styleClass="form-control" id="itemName" value="#{purchaseMB.typeId}">   
+                                <p:selectOneMenu filter="true" filterMatchMode="contains" style="margin-left: 20px" styleClass="form-control" id="itemName" value="#{purchaseMB.typeId}">   
                                     <f:selectItem  itemLabel="Select" itemValue="0" />
                                     <f:selectItems value="#{purchaseMB.lstItemType}" var="type" itemLabel="#{type.itemTypeName}" itemValue="#{type.itemTypeId}" />
 
@@ -64,14 +64,14 @@
 
                                 <p:outputLabel for="product" style="margin-left: 20px"  value="Product"/>
 
-                                <p:selectOneMenu  style="margin-left: 20px" styleClass="form-control" required="true" id="product" value="#{purchaseMB.purchaseDetailModel.itemProductModel.productId}">   
+                                <p:selectOneMenu filter="true" filterMatchMode="contains" style="margin-left: 20px" styleClass="form-control" required="true" id="product" value="#{purchaseMB.purchaseDetailModel.itemProductModel.productId}">   
                                     <f:selectItem  itemLabel="Select" itemValue="0" />
                                     <f:selectItems value="#{purchaseMB.lstProduct}" var="pdt" itemLabel="#{pdt.productCode}" itemValue="#{pdt.productId}" />
 
                                 </p:selectOneMenu>
                                 <p:outputLabel for="unit" style="margin-left: 20px"  value="Unit"/>
 
-                                <p:selectOneMenu  style="margin-left: 20px" styleClass="form-control" required="true"  id="unit" value="#{purchaseMB.purchaseDetailModel.unitModel.unitId}">   
+                                <p:selectOneMenu filter="true" filterMatchMode="contains" style="margin-left: 20px" styleClass="form-control" required="true"  id="unit" value="#{purchaseMB.purchaseDetailModel.unitModel.unitId}">   
                                     <f:selectItem  itemLabel="Select" itemValue="0" />
                                     <f:selectItems value="#{purchaseMB.lstUnits}" var="unit" itemLabel="#{unit.unitName}" itemValue="#{unit.unitId}" />
 

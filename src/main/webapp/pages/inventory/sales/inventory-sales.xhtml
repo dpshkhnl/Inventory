@@ -5,7 +5,7 @@
                 template="#{layoutMB.layout}">
 
     <ui:define name="title">
-       Purchase Return
+        Inventory Sales
     </ui:define>
 
     <ui:define name="body">
@@ -19,25 +19,26 @@
 
                     <p:separator/>
                     <div class="col-md-4">
-                        <p:fieldset legend="Supplier " >
-                            <p:outputLabel for="supplier"  value="Supplier Name:"/>
+                        <p:fieldset legend="Customer " >
+                            <p:outputLabel for="customer"  value="Customer Name:"/>
 
-                            <p:selectOneMenu filter="true" filterMatchMode="contains" styleClass="form-control" id="supplier" value="#{purchaseMB.inventoryInvoiceModel.supId.id}">   
+                            <p:selectOneMenu filter="true" filterMatchMode="contains" styleClass="form-control" id="customer" value="#{salesMB.inventoryReceiptModel.supId.id}">   
                                 <f:selectItem  itemLabel="Select" itemValue="0" />
-                                <f:selectItems value="#{purchaseMB.lstSupModels}" var="sup" itemLabel="#{sup.memberName}" itemValue="#{sup.id}" />
+                                <f:selectItems value="#{salesMB.lstSupModels}" var="sup" itemLabel="#{sup.memberName}" itemValue="#{sup.id}" />
 
                             </p:selectOneMenu>
 
 
-                           
+                            <p:outputLabel value="Receipt No:"  for="inptModel"/>
+                            <p:inputText id="inptModel" styleClass="form-control"   value="#{salesMB.inventoryReceiptModel.receiptNo}"/>
                             <h:panelGrid columns="1">
-                                <p:outputLabel value="Return Date:"  for="purchaseDate"/>
-                                <p:calendar id="purchaseDate" value="#{purchaseMB.inventoryInvoiceModel.invDtEn}" pattern="yyy-MM-dd" />
+                                <p:outputLabel value="Sales Date:"  for="salesDate"/>
+                                <p:calendar id="salesDate" value="#{salesMB.inventoryReceiptModel.receiptDtEn}" pattern="yyy-MM-dd" />
                             </h:panelGrid>
 
                             <p:outputLabel value="Remarks:"  for="remarks"/>
 
-                            <p:inputText id="remarks" styleClass="form-control"   value="#{purchaseMB.inventoryInvoiceModel.remarks}"/>
+                            <p:inputText id="remarks" styleClass="form-control"   value="#{salesMB.inventoryReceiptModel.remarks}"/>
                         </p:fieldset>
                     </div>
                     <p:spacer width="5"/>
@@ -47,32 +48,32 @@
 
                                 <p:outputLabel for="itemCat" style="margin-left: 20px"   value="Item Category:"/>
 
-                                <p:selectOneMenu filter="true" filterMatchMode="contains" style="margin-left: 20px" styleClass="form-control" id="itemCat" value="#{purchaseMB.catId}">   
+                                <p:selectOneMenu filter="true" filterMatchMode="contains" style="margin-left: 20px" styleClass="form-control" id="itemCat" value="#{salesMB.catId}">   
                                     <f:selectItem  itemLabel="Select" itemValue="0" />
-                                    <f:selectItems value="#{purchaseMB.lstCat}" var="cat" itemLabel="#{cat.catName}" itemValue="#{cat.catId}" />
+                                    <f:selectItems value="#{salesMB.lstCat}" var="cat" itemLabel="#{cat.catName}" itemValue="#{cat.catId}" />
 
                                 </p:selectOneMenu>
 
                                 <p:outputLabel for="itemName" style="margin-left: 20px"   value="Item:"/>
 
-                                <p:selectOneMenu  filter="true" filterMatchMode="contains" style="margin-left: 20px" styleClass="form-control" id="itemName" value="#{purchaseMB.typeId}">   
+                                <p:selectOneMenu filter="true" filterMatchMode="contains" style="margin-left: 20px" styleClass="form-control" id="itemName" value="#{salesMB.typeId}">   
                                     <f:selectItem  itemLabel="Select" itemValue="0" />
-                                    <f:selectItems value="#{purchaseMB.lstItemType}" var="type" itemLabel="#{type.itemTypeName}" itemValue="#{type.itemTypeId}" />
+                                    <f:selectItems value="#{salesMB.lstItemType}" var="type" itemLabel="#{type.itemTypeName}" itemValue="#{type.itemTypeId}" />
 
                                 </p:selectOneMenu>
 
                                 <p:outputLabel for="product" style="margin-left: 20px"  value="Product"/>
 
-                                <p:selectOneMenu filter="true" filterMatchMode="contains" style="margin-left: 20px" styleClass="form-control" required="true" id="product" value="#{purchaseMB.purchaseDetailModel.itemProductModel.productId}">   
+                                <p:selectOneMenu filter="true" filterMatchMode="contains" style="margin-left: 20px" styleClass="form-control" required="true" id="product" value="#{salesMB.salesDetailModel.itemProductModel.productId}">   
                                     <f:selectItem  itemLabel="Select" itemValue="0" />
-                                    <f:selectItems value="#{purchaseMB.lstProduct}" var="pdt" itemLabel="#{pdt.productCode}" itemValue="#{pdt.productId}" />
+                                    <f:selectItems value="#{salesMB.lstProduct}" var="pdt" itemLabel="#{pdt.productCode}" itemValue="#{pdt.productId}" />
 
                                 </p:selectOneMenu>
                                 <p:outputLabel for="unit" style="margin-left: 20px"  value="Unit"/>
 
-                                <p:selectOneMenu filter="true" filterMatchMode="contains" style="margin-left: 20px" styleClass="form-control" required="true"  id="unit" value="#{purchaseMB.purchaseDetailModel.unitModel.unitId}">   
+                                <p:selectOneMenu filter="true" filterMatchMode="contains" style="margin-left: 20px" styleClass="form-control" required="true"  id="unit" value="#{salesMB.salesDetailModel.unitModel.unitId}">   
                                     <f:selectItem  itemLabel="Select" itemValue="0" />
-                                    <f:selectItems value="#{purchaseMB.lstUnits}" var="unit" itemLabel="#{unit.unitName}" itemValue="#{unit.unitId}" />
+                                    <f:selectItems value="#{salesMB.lstUnits}" var="unit" itemLabel="#{unit.unitName}" itemValue="#{unit.unitId}" />
 
                                 </p:selectOneMenu>
 
@@ -81,23 +82,26 @@
 
                             <div class="col-md-6">
                                 <p:outputLabel value="Unit count:" style="margin-left: 20px" for="unitCount"/>
-                                <p:inputText id="unitCount" required="true" styleClass="form-control" style="margin-left: 20px;"  value="#{purchaseMB.purchaseDetailModel.inQty}">
-                                    <p:ajax event="blur" listener="#{purchaseMB.getPurchaseTotal}" update="totCost"/>
+                                <p:inputText id="unitCount" required="true" styleClass="form-control" style="margin-left: 20px;"  value="#{salesMB.salesDetailModel.outQty}">
+                                    <p:ajax event="blur" listener="#{salesMB.getSalesTotal}" update="totCost"/>
                                 </p:inputText>
 
                                 <p:outputLabel value="Unit cost:" style="margin-left: 20px" for="unitCost"/>
-                                <p:inputText id="unitCost" required="true" styleClass="form-control" style="margin-left: 20px;"  value="#{purchaseMB.purchaseDetailModel.perCost}">
-                                    <p:ajax event="blur" listener="#{purchaseMB.getPurchaseTotal}" update="totCost"/>
+                                <p:inputText id="unitCost" required="true" styleClass="form-control" style="margin-left: 20px;"  value="#{salesMB.salesDetailModel.perCost}">
+                                    <p:ajax event="blur" listener="#{salesMB.getSalesTotal}" update="totCost"/>
                                 </p:inputText>
 
 
                                 <p:outputLabel value="Total Cost" style="margin-left: 20px"   for="totCost"/>
 
-                                <p:inputText id="totCost" disabled="true" styleClass="form-control" style="margin-left: 20px;"  value="#{purchaseMB.purchaseDetailModel.totalCost}"/>
+                                <p:inputText id="totCost" disabled="true" styleClass="form-control" style="margin-left: 20px;"  value="#{salesMB.salesDetailModel.totalCost}"/>
 
-                               
+                                <p:outputLabel value="Selling Price" style="margin-left: 20px"   for="sellPrice"/>
+
+                                <p:inputText id="sellPrice" styleClass="form-control" style="margin-left: 20px;"  value="#{salesMB.salesDetailModel.costPrice}"/>
+
                                 <p:spacer width="5" height="10"/>
-                                <p:commandButton value="Add" action="#{purchaseMB.addProductItem()}" update="@form" 
+                                <p:commandButton value="Add" action="#{salesMB.addProductItem()}" update="@form" 
                                                  icon="fa fa-plus" styleClass="btn-primary"/>
                                 <p:spacer width="5" height="10"/>
 
@@ -116,10 +120,10 @@
                     <div class="form-inline">
 
                         <p:spacer width="5" />
-                        <p:dataTable widgetVar="carsTable" var="purchase" value="#{purchaseMB.lstPurchaseDet}" rows="5"
-                                     rowKey="#{purchase.invPurchaseId}" lazy="true" paginator="true"
+                        <p:dataTable widgetVar="carsTable" var="sales" value="#{salesMB.lstSalesDetails}" rows="5"
+                                     rowKey="#{sales.invsaleId}" lazy="true" paginator="true"
                                      rowIndexVar="rowsn"
-                                     paginatorPosition="bottom" selection="#{purchaseMB.selectedPurchaseDet}"
+                                     paginatorPosition="bottom" selection="#{salesMB.selectedSalesDet}"
                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
                                      currentPageReportTemplate="[ {startRecord} to {endRecord} of {totalRecords} ]"
                                      rowsPerPageTemplate="5,10,15,20,30"
@@ -138,50 +142,49 @@
                             </p:column>
                             <p:column headerText="Item Name" >
 
-                                #{purchase.itemProductModel.productCode}
+                                #{sales.itemProductModel.productCode}
                             </p:column>
-                            <p:column headerText="In Count" >
+                            <p:column headerText="Quantity" >
 
-                                #{purchase.inQty}
+                                #{sales.outQty}
                             </p:column>
                             <p:column headerText="Unit Cost" >
 
-                                #{purchase.perCost}
+                                #{sales.perCost}
                             </p:column>
                             <p:column headerText="Total Cost" >
 
-                                #{purchase.totalCost}
+                                #{sales.totalCost}
                             </p:column>
 
                             <p:column headerText="Stock In Hand" >
 
-                                #{purchase.inQty}
+                                #{sales.outQty}
                             </p:column>
                         </p:dataTable>     
 
                         <p:outputLabel value="Total:" style="margin-left: 20px" for="total"/>
-                        <p:inputText id="total" styleClass="form-control" style="margin-left: 20px;width: 10%"  value="#{purchaseMB.total}"/>
+                        <p:inputText id="total" styleClass="form-control" style="margin-left: 20px;width: 10%"  value="#{salesMB.total}"/>
 
 
 
                         <p:outputLabel value="VAT" style="margin-left: 20px"   for="vat"/>
-                        <p:selectBooleanCheckbox label="vat" value="#{purchaseMB.useVat}">
-                            <p:ajax listener="#{purchaseMB.calculateVat()}" update="vat gTotal"/>
+                        <p:selectBooleanCheckbox label="vat" value="#{salesMB.useVat}">
+                            <p:ajax listener="#{salesMB.calculateVat()}" update="vat gTotal"/>
                         </p:selectBooleanCheckbox>
-                        <p:inputText id="vat" style="margin-left: 20px;width: 10%" disabled="true"  value="#{purchaseMB.inventoryInvoiceModel.invVatAmt}"/>
+                        <p:inputText id="vat" style="margin-left: 20px;width: 10%" disabled="true"  value="#{salesMB.inventoryReceiptModel.receiptVatAmt}"/>
 
-                        <p:outputLabel value="Return cost" style="margin-left: 20px"   for="discount"/>
-                        <p:selectBooleanCheckbox label="discount" value="#{purchaseMB.useDiscount}">
-                            <p:ajax event="select" update="discount"/>
-                        </p:selectBooleanCheckbox>
-                        <p:inputText disabled="#{not purchaseMB.useDiscount}" id="discount" style="margin-left: 20px;width: 10%"  value="#{purchaseMB.inventoryInvoiceModel.invDiscountAmt}">
-                        <p:ajax event="blur" listener="#{purchaseMB.getGrandTotal}" update="totCost"/>
+                        <p:outputLabel value="Discount" style="margin-left: 20px"   for="discount"/>
+                        <p:selectBooleanCheckbox label="discount" value="#{salesMB.useDiscount}">
+                        <p:ajax event="select" update="discount"/></p:selectBooleanCheckbox>
+                        <p:inputText disabled="#{salesMB.useDiscount ne true}" id="discount" style="margin-left: 20px;width: 10%"  value="#{salesMB.inventoryReceiptModel.receiptDiscountAmt}">
+                        <p:ajax event="blur" listener="#{salesMB.getGrandTotal}" update="totCost"/>
                         </p:inputText>
                         <p:outputLabel value="Grand Total:" style="margin-left: 20px" for="gTotal"/>
-                        <p:inputText id="gTotal" styleClass="form-control" style="margin-left: 20px;width: 10%"  value="#{purchaseMB.inventoryInvoiceModel.invAmt}"/>
+                        <p:inputText id="gTotal" styleClass="form-control" style="margin-left: 20px;width: 10%"  value="#{salesMB.inventoryReceiptModel.receiptAmt}"/>
 
                         <p:spacer width="5" />
-                        <p:commandButton value="Save" action="#{purchaseMB.purchaseReturn()}" update="@form"
+                        <p:commandButton value="Save" action="#{salesMB.saveSales}" update="@form"
                                          icon="fa fa-plus" styleClass="btn-primary"/>
                         <p:spacer width="5" />
 

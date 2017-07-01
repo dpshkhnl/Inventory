@@ -22,13 +22,10 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.persistence.Version;
 import np.info.dpshkhnl.model.admin.UnitModel;
-import np.info.dpshkhnl.model.product.BrandModel;
-import np.info.dpshkhnl.model.product.ItemCategoryModel;
 import np.info.dpshkhnl.model.product.ItemProductModel;
-import np.info.dpshkhnl.model.product.ItemTypeModel;
+import np.info.dpshkhnl.model.sales.InventoryReceiptModel;
 
 @Entity
 @Table(name = "inv_stock_master")
@@ -42,8 +39,12 @@ public class InventoryMasterModel implements Serializable {
 	private int invMasterId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "inv_id", referencedColumnName = "invoice_id")
+	@JoinColumn(name = "inv_id", referencedColumnName = "invoice_id", nullable = true)
 	private InventoryInvoiceModel invInvoiceStk;
+        
+        @ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "receipt_id", referencedColumnName = "receipt_id",nullable = true)
+	private InventoryReceiptModel invReceipt;
 
 	
 	@OneToOne
@@ -249,6 +250,14 @@ public class InventoryMasterModel implements Serializable {
 
     public void setIsRemove(boolean isRemove) {
         this.isRemove = isRemove;
+    }
+
+    public InventoryReceiptModel getInvReceipt() {
+        return invReceipt;
+    }
+
+    public void setInvReceipt(InventoryReceiptModel invReceipt) {
+        this.invReceipt = invReceipt;
     }
 
 	
