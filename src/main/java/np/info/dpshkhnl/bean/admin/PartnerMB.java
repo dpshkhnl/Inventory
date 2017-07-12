@@ -6,7 +6,6 @@
 package np.info.dpshkhnl.bean.admin;
 
 import com.github.adminfaces.template.exception.BusinessException;
-import static com.github.adminfaces.template.util.Assert.has;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,12 +16,16 @@ import np.info.dpshkhnl.infra.model.Filter;
 import np.info.dpshkhnl.model.account.AccHead;
 import np.info.dpshkhnl.model.admin.PartnerModel;
 import np.info.dpshkhnl.model.admin.RouteManagementModel;
-import np.info.dpshkhnl.service.account.AccountHeadEJB;
+import np.info.dpshkhnl.service.account.AccountEJB;
 import np.info.dpshkhnl.service.admin.PartnerEJB;
 import np.info.dpshkhnl.service.admin.RouteEJB;
-import static np.info.dpshkhnl.util.Utils.addDetailMessage;
 import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.util.Faces;
+import static com.github.adminfaces.template.util.Assert.has;
+import java.util.Date;
+import np.info.dpshkhnl.model.account.Accounts;
+import np.info.dpshkhnl.service.account.AccountHeadEJB;
+import static np.info.dpshkhnl.util.Utils.addDetailMessage;
 
 /**
  *
@@ -36,6 +39,9 @@ public class PartnerMB implements Serializable{
     private AccountHeadEJB accountHeadEJB;
     
     @EJB
+    AccountEJB accountsEJB;
+    
+    @EJB
     PartnerEJB partnerEJB;
     
     @EJB
@@ -46,6 +52,7 @@ public class PartnerMB implements Serializable{
      private List<PartnerModel> selectedValue;
      private List<RouteManagementModel> lstRoutes;
      private List<AccHead> lstAccHeads;
+     private double openingBal;
 
     public List<PartnerModel> getSelectedValue() {
         if (selectedValue == null)
@@ -74,10 +81,9 @@ public class PartnerMB implements Serializable{
     public PartnerModel getPartnerModel() {
         if(partnerModel == null)
             partnerModel = new PartnerModel();
-        if(partnerModel.getAccountPayable()== null)
-            partnerModel.setAccountPayable(new AccHead());
-        if(partnerModel.getAccountReceivable()== null)
-            partnerModel.setAccountReceivable(new AccHead());
+        if(partnerModel.getAccountHead()== null)
+            partnerModel.setAccountHead(new AccHead());
+       
         if(partnerModel.getRoute() == null)
             partnerModel.setRoute(new RouteManagementModel());
         return partnerModel;
@@ -127,19 +133,43 @@ public class PartnerMB implements Serializable{
         selectedValue.add(partnerEJB.find(id));
     }
      
-     public void savePartner()
+     public void savePartner() throws IOException
     {
         
          String msg;
         if (partnerModel.getId()== 0) {
-            partnerModel.setDebit(Double.valueOf(0));
-            partnerModel.setCredit(Double.valueOf(0));
+            
+            if(partnerModel.getCustomer())
+            {
+                Accounts acc = accountsEJB.findbyAccountName("Receivable");
+                 partnerModel.getAccountHead().setAccCode(acc.getAccHeadId() +"."+partnerEJB.findMaxPartnerId()+1);
+                 partnerModel.getAccountHead().setAccName(partnerModel.getMemberName());
+                 partnerModel.getAccountHead().setAccType(acc);
+                 partnerModel.getAccountHead().setDrBalance(openingBal);
+                 partnerModel.getAccountHead().setAlias(partnerModel.getMemberName());
+                 partnerModel.getAccountHead().setCreatedDate(new Date());
+                 partnerModel.getAccountHead().setDrcr("dr");
+            }else if(partnerModel.getSupplier())
+            {
+                Accounts acc = accountsEJB.findbyAccountName("Payable");
+                 partnerModel.setRoute(null);
+                 partnerModel.getAccountHead().setAccCode(acc.getAccHeadId() +"."+partnerEJB.findMaxPartnerId()+1);
+                 partnerModel.getAccountHead().setAccName(partnerModel.getMemberName());
+                 partnerModel.getAccountHead().setAccType(acc);
+                 partnerModel.getAccountHead().setCrBalance(openingBal);
+                 partnerModel.getAccountHead().setAlias(partnerModel.getMemberName());
+                 partnerModel.getAccountHead().setCreatedDate(new Date());
+                 partnerModel.getAccountHead().setDrcr("cr");  
+            }
+            
             partnerEJB.save(partnerModel);
             msg = "Partner  " + partnerModel.getMemberName()+ " created successfully";
         } else {
             partnerEJB.update(partnerModel);
             msg = "Partner  " + partnerModel.getMemberName()+ "  updated successfully";
         }
+        Faces.getFlash().setKeepMessages(true);
+            Faces.redirect("pages/admin/partner/partner-list.xhtml");
         addDetailMessage(msg);
     }
     public boolean isNew() {
@@ -153,11 +183,11 @@ public class PartnerMB implements Serializable{
     
      public void remove() throws IOException {
         if (has(partnerModel) && has(partnerModel.getId())) {
-          partnerEJB.delete(partnerModel,PartnerModel.class);
+          partnerEJB.delete(partnerModel.getId(),PartnerModel.class);
             addDetailMessage("Partner " + partnerModel.getMemberName()
                     + " removed successfully");
             Faces.getFlash().setKeepMessages(true);
-            Faces.redirect("partner-list.xhtml");
+            Faces.redirect("/pages/admin/partner/partner-list.xhtml");
         }
     }
      
@@ -198,5 +228,13 @@ public class PartnerMB implements Serializable{
 
     public void setLstAccHeads(List<AccHead> lstAccHeads) {
         this.lstAccHeads = lstAccHeads;
+    }
+
+    public double getOpeningBal() {
+        return openingBal;
+    }
+
+    public void setOpeningBal(double openingBal) {
+        this.openingBal = openingBal;
     }
 }

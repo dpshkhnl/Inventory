@@ -67,7 +67,7 @@
                                 <p:selectOneMenu filter="true" filterMatchMode="contains" style="margin-left: 20px" styleClass="form-control" required="true" id="product" value="#{salesMB.salesDetailModel.itemProductModel.productId}">   
                                     <f:selectItem  itemLabel="Select" itemValue="0" />
                                     <f:selectItems value="#{salesMB.lstProduct}" var="pdt" itemLabel="#{pdt.productCode}" itemValue="#{pdt.productId}" />
-
+                                    <p:ajax listener="#{salesMB.loadCostPrice}" update="sellPrice" />
                                 </p:selectOneMenu>
                                 <p:outputLabel for="unit" style="margin-left: 20px"  value="Unit"/>
 
@@ -96,9 +96,9 @@
 
                                 <p:inputText id="totCost" disabled="true" styleClass="form-control" style="margin-left: 20px;"  value="#{salesMB.salesDetailModel.totalCost}"/>
 
-                                <p:outputLabel value="Selling Price" style="margin-left: 20px"   for="sellPrice"/>
+                                <p:outputLabel value="Cost Price" style="margin-left: 20px"   for="sellPrice"/>
 
-                                <p:inputText id="sellPrice" styleClass="form-control" style="margin-left: 20px;"  value="#{salesMB.salesDetailModel.costPrice}"/>
+                                <p:inputText id="sellPrice" styleClass="form-control" style="margin-left: 20px;" disabled="true"  value="#{salesMB.salesDetailModel.costPrice}"/>
 
                                 <p:spacer width="5" height="10"/>
                                 <p:commandButton value="Add" action="#{salesMB.addProductItem()}" update="@form" 

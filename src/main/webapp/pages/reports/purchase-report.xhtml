@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
+                template="#{layoutMB.layout}">
+
+    <ui:define name="title">
+        Purchase Report
+    </ui:define>
+
+    <ui:define name="body">
+        <f:metadata>
+            <f:viewParam name="id" value="#{accountHeadMB.accHead.accHeadId}" converter="javax.faces.Long"/>
+            <!-- use view action if you are in a Java EE 7 server: <f:viewAction action="#{carFormMB.init()}"/>-->
+            <f:event type="preRenderView" listener="#{accountHeadMB.init}"/>
+        </f:metadata>
+
+        <h:form id="form" prependId="false">
+
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div class="container-fluid">
+                        <div class="row">
+
+                            <div class="col-md-4">
+
+                                <div class="form-group ">
+
+                                    <label for="dateFrom" class="col-sm-4 control-label">
+                                        From
+                                    </label>
+                                    <div class="col-sm-8">
+
+                                        <p:calendar id="dateFrom" size="25"  value="#{reportsMB.dateFrm}" pattern="yyy-MM-dd" />
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+                                    <label for="dateTo" class="col-sm-4 control-label">
+                                        To
+                                    </label>
+                                    <div class="col-sm-8">
+
+                                        <p:calendar id="dateTo" size="25" value="#{reportsMB.dateTo}" pattern="yyy-MM-dd" />
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="cust" class="col-sm-4 control-label">
+                                        Customer:
+                                    </label>
+
+                                    <div class="col-sm-8">
+                                        <p:selectOneMenu filter="true" filterMatchMode="contains"  id="cust" value="#{reportsMB.customerId}">   
+                                            <f:selectItem  itemLabel="Select" itemValue="0" />
+                                            <f:selectItems value="#{reportsMB.lstSupplier}" var="cat" itemLabel="#{cat.memberName}(#{cat.contactPerson})" itemValue="#{cat.id}" />
+
+                                        </p:selectOneMenu>
+                                    </div></div>
+
+
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+
+                                        <p:commandButton value="Load Details" action="#{reportsMB.loadPurchaseReport()}" update="@form"
+                                                         styleClass="btn-primary"/>
+                                        <p:commandButton value="Reset" action="#{reportsMB.reset()}" update="@form"
+                                                         styleClass="btn-danger"/>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-8">
+                                <p:dataTable id="tblTrxn" class="table table-condensed table-hover table-bordered" var="trxn"
+                                             value="#{reportsMB.lstPurchase}" rows="20"
+                                             paginator="true"
+                                             paginatorPosition="bottom"
+                                             rowIndexVar="rowsn"
+                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
+                                             currentPageReportTemplate="[ {startRecord} to {endRecord} of {totalRecords} ]"
+                                             rowsPerPageTemplate="20,40,80,100,200"
+                                             >
+
+                                    <p:column headerText="S.No" width="10%">
+                                        #{rowsn+1}
+                                    </p:column>
+                                    <p:column headerText="Customers" >
+
+                                        <h:outputText value="#{trxn.supId.memberName}" >
+
+                                        </h:outputText> 
+                                    </p:column>
+                                    <p:column headerText="Invoice No" >
+
+                                        #{trxn.invNo}
+                                    </p:column>
+
+                                    <p:column headerText="Invoice Date" >
+
+                                        <h:outputText value="#{trxn.invDtEn}">
+                                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                                        </h:outputText>
+                                    </p:column>
+
+                                    <p:column headerText="Amount " >
+
+                                        <h:outputText value=" #{trxn.invAmt}">
+                                            <f:convertNumber type="currency" currencySymbol="Rs." />
+                                        </h:outputText>
+
+                                    </p:column>
+
+                                </p:dataTable> 
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </h:form>
+
+
+    </ui:define>
+
+</ui:composition>

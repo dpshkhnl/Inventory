@@ -19,7 +19,11 @@
 
                     <p:separator/>
                     <div class="col-md-4">
+                        <p:outputLabel for="op"  value="Opening Stock:"/>
+                        <p:selectBooleanCheckbox  id="op" label="Opening Stock" value="#{purchaseMB.openingStock}"/>
+                            
                         <p:fieldset legend="Supplier " >
+                            <p:selectBooleanCheckbox label="Opening Stock" value="#{purchaseMB.openingStock}"/>
                             <p:outputLabel for="supplier"  value="Supplier Name:"/>
 
                             <p:selectOneMenu filter="true" filterMatchMode="contains" styleClass="form-control" id="supplier" value="#{purchaseMB.inventoryInvoiceModel.supId.id}">   

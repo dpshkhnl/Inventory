@@ -32,56 +32,59 @@ import org.omnifaces.util.Faces;
  *
  * @author Dpshkhnl
  */
-  @Named
+@Named
 @ViewScoped
-public class ItemProductMB implements Serializable{
-    
+public class ItemProductMB implements Serializable {
+
     @EJB
     ItemProductEJB itemProductEJB;
-    
+
     @EJB
     ItemCategoryEJB itemCatEJB;
-    
+
     @EJB
     ItemTypeEJB itemTypeEJB;
-    
+
     @EJB
     BrandNameEJB brandNameEJB;
-    
+
     @EJB
     UnitSettingEJB unitEJB;
-    
+
     private ItemProductModel itemProductModel;
     private List<ItemProductModel> lstItemProduct;
-    private List<ItemProductModel> selectedValue; 
+    private List<ItemProductModel> selectedValue;
     private List<ItemProductModel> filteredValue;
     private Filter<ItemProductModel> filter = new Filter<>(new ItemProductModel());
-        private List<ItemCategoryModel> lstItemCat;
-         private List<ItemTypeModel> lstItemType;
-          private List<BrandModel> lstBrands;
-          private List<UnitModel> lstUnits;
-    
-     public void init() {
-        if(Faces.isAjaxRequest()){
-           return;
+    private List<ItemCategoryModel> lstItemCat;
+    private List<ItemTypeModel> lstItemType;
+    private List<BrandModel> lstBrands;
+    private List<UnitModel> lstUnits;
+
+    public void init() {
+        if (Faces.isAjaxRequest()) {
+            return;
         }
         getItemProductModel();
         if (has(itemProductModel.getProductId())) {
             itemProductModel = itemProductEJB.find(itemProductModel.getProductId());
-        } 
+        }
     }
 
     public ItemProductModel getItemProductModel() {
-        if(itemProductModel == null)
+        if (itemProductModel == null) {
             itemProductModel = new ItemProductModel();
-        if(itemProductModel.getBrandId()== null)
+        }
+        if (itemProductModel.getBrandId() == null) {
             itemProductModel.setBrandId(new BrandModel());
-        if(itemProductModel.getItemId()== null)
+        }
+        if (itemProductModel.getItemId() == null) {
             itemProductModel.setItemId(new ItemTypeModel());
-        if(itemProductModel.getUnitId()== null)
+        }
+        if (itemProductModel.getUnitId() == null) {
             itemProductModel.setUnitId(new UnitModel());
-        
-       
+        }
+
         return itemProductModel;
     }
 
@@ -90,8 +93,9 @@ public class ItemProductMB implements Serializable{
     }
 
     public List<ItemProductModel> getLstItemProduct() {
-        if(lstItemProduct == null)
+        if (lstItemProduct == null) {
             lstItemProduct = new ArrayList<>();
+        }
         lstItemProduct = itemProductEJB.findAll();
         return lstItemProduct;
     }
@@ -101,8 +105,9 @@ public class ItemProductMB implements Serializable{
     }
 
     public List<ItemProductModel> getSelectedValue() {
-         if(selectedValue == null)
+        if (selectedValue == null) {
             selectedValue = new ArrayList<>();
+        }
         return selectedValue;
     }
 
@@ -111,8 +116,9 @@ public class ItemProductMB implements Serializable{
     }
 
     public List<ItemProductModel> getFilteredValue() {
-         if(filteredValue == null)
+        if (filteredValue == null) {
             filteredValue = new ArrayList<>();
+        }
         return filteredValue;
     }
 
@@ -121,58 +127,59 @@ public class ItemProductMB implements Serializable{
     }
 
     public Filter<ItemProductModel> getFilter() {
-         
+
         return filter;
     }
 
     public void setFilter(Filter<ItemProductModel> filter) {
         this.filter = filter;
     }
-    
-      public void save()
-    {
-        
-         String msg;
-        if (itemProductModel.getProductId()== 0) {
+
+    public void save() {
+
+        String msg;
+        if (itemProductModel.getProductId() == 0) {
             itemProductEJB.save(itemProductModel);
-            msg = "Item" + itemProductModel.getProductCode()+ " created successfully";
+            msg = "Item" + itemProductModel.getProductCode() + " created successfully";
         } else {
             itemProductEJB.update(itemProductModel);
-            msg = "Item " + itemProductModel.getProductCode()+ " updated successfully";
+            msg = "Item " + itemProductModel.getProductCode() + " updated successfully";
         }
         addDetailMessage(msg);
     }
+
     public boolean isNew() {
-        return itemProductModel == null || itemProductModel.getProductId()== 0;
+        return itemProductModel == null || itemProductModel.getProductId() == 0;
     }
+
     public void clear() {
         itemProductModel = null;
         getItemProductModel();
-        
+
     }
-    
-     public void remove() throws IOException {
+
+    public void remove() throws IOException {
         if (has(itemProductModel) && has(itemProductModel.getProductId())) {
-          itemProductEJB.delete(itemProductModel.getProductId(),ItemProductModel.class);
+            itemProductEJB.delete(itemProductModel.getProductId(), ItemProductModel.class);
             addDetailMessage("Item " + itemProductModel.getProductCode()
                     + " removed successfully");
             Faces.getFlash().setKeepMessages(true);
             Faces.redirect("item-product-list.xhtml");
         }
     }
-     
-      public void delete() {
+
+    public void delete() {
         int numCars = 0;
         for (ItemProductModel route : selectedValue) {
             numCars++;
-            itemProductEJB.delete(route.getProductId(),ItemProductModel.class);
-            
+            itemProductEJB.delete(route.getProductId(), ItemProductModel.class);
+
         }
         selectedValue.clear();
         addDetailMessage(numCars + " Item Type deleted successfully!");
     }
-      
-        public void findItemTypeById(Integer id) {
+
+    public void findItemTypeById(Integer id) {
         if (id == null) {
             throw new BusinessException("Provide Item Type ID to load");
         }
@@ -180,8 +187,9 @@ public class ItemProductMB implements Serializable{
     }
 
     public List<ItemCategoryModel> getLstItemCat() {
-        if(lstItemCat == null)
+        if (lstItemCat == null) {
             lstItemCat = new ArrayList<>();
+        }
         lstItemCat = itemCatEJB.findAll();
         return lstItemCat;
     }
@@ -191,8 +199,9 @@ public class ItemProductMB implements Serializable{
     }
 
     public List<BrandModel> getLstBrands() {
-        if(lstBrands == null)
+        if (lstBrands == null) {
             lstBrands = new ArrayList<>();
+        }
         lstBrands = brandNameEJB.findAll();
         return lstBrands;
     }
@@ -202,9 +211,10 @@ public class ItemProductMB implements Serializable{
     }
 
     public List<ItemTypeModel> getLstItemType() {
-       if(lstItemType == null)
-           lstItemType  = new ArrayList<>();
-       lstItemType = itemTypeEJB.findAll();
+        if (lstItemType == null) {
+            lstItemType = new ArrayList<>();
+        }
+        lstItemType = itemTypeEJB.findAll();
         return lstItemType;
     }
 
@@ -213,15 +223,15 @@ public class ItemProductMB implements Serializable{
     }
 
     public List<UnitModel> getLstUnits() {
-      if(lstUnits == null)
-          lstUnits = new ArrayList<>();
-      lstUnits = unitEJB.findAll();
+        if (lstUnits == null) {
+            lstUnits = new ArrayList<>();
+        }
+        lstUnits = unitEJB.findAll();
         return lstUnits;
     }
 
     public void setLstUnits(List<UnitModel> lstUnits) {
         this.lstUnits = lstUnits;
     }
-    
-}
 
+}

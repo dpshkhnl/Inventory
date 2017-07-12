@@ -7,6 +7,7 @@ package np.info.dpshkhnl.model.admin;
 
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -42,20 +43,11 @@ public class PartnerModel implements Serializable {
 	@Column(name="member_address")
 	private String memberAddress;
 
-	 @NotNull
-    @Column(name = "credit")
-    private Double credit;
-    @NotNull
-    @Column(name = "debit")
-    private Double debit;
+	
+     @JoinColumn(name = "acc_head" )
+    @ManyToOne( cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
+    private AccHead accountHead;
     
-    
-     @JoinColumn(name = "accountReceivable_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private AccHead accountReceivable;
-    @JoinColumn(name = "accountPayable_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private AccHead accountPayable;   
     
     @JoinColumn(name = "route_id" )
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
@@ -130,38 +122,7 @@ public class PartnerModel implements Serializable {
     public void setMemberAddress(String memberAddress) {
         this.memberAddress = memberAddress;
     }
-
-    public Double getCredit() {
-        return credit;
-    }
-
-    public void setCredit(Double credit) {
-        this.credit = credit;
-    }
-
-    public Double getDebit() {
-        return debit;
-    }
-
-    public void setDebit(Double debit) {
-        this.debit = debit;
-    }
-
-    public AccHead getAccountReceivable() {
-        return accountReceivable;
-    }
-
-    public void setAccountReceivable(AccHead accountReceivable) {
-        this.accountReceivable = accountReceivable;
-    }
-
-    public AccHead getAccountPayable() {
-        return accountPayable;
-    }
-
-    public void setAccountPayable(AccHead accountPayable) {
-        this.accountPayable = accountPayable;
-    }
+ 
 
     public String getMemberContactNo() {
         return memberContactNo;
@@ -265,6 +226,14 @@ public class PartnerModel implements Serializable {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public AccHead getAccountHead() {
+        return accountHead;
+    }
+
+    public void setAccountHead(AccHead accountHead) {
+        this.accountHead = accountHead;
     }
 
 	

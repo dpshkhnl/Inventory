@@ -7,10 +7,13 @@ package np.info.dpshkhnl.bean.sales;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
+import np.info.dpshkhnl.model.account.AccHead;
 import np.info.dpshkhnl.model.account.CodeValue;
+import np.info.dpshkhnl.model.account.Ledger;
 import np.info.dpshkhnl.model.admin.PartnerModel;
 import np.info.dpshkhnl.model.admin.UnitModel;
 import np.info.dpshkhnl.model.product.ItemCategoryModel;
@@ -21,7 +24,9 @@ import np.info.dpshkhnl.model.purchase.InventoryMasterModel;
 import np.info.dpshkhnl.model.purchase.PurchaseDetailModel;
 import np.info.dpshkhnl.model.sales.InventoryReceiptModel;
 import np.info.dpshkhnl.model.sales.SalesDetailModel;
+import np.info.dpshkhnl.service.account.AccountHeadEJB;
 import np.info.dpshkhnl.service.account.CodeValueEJB;
+import np.info.dpshkhnl.service.account.LedgerEJB;
 import np.info.dpshkhnl.service.admin.PartnerEJB;
 import np.info.dpshkhnl.service.admin.UnitSettingEJB;
 import np.info.dpshkhnl.service.admin.VatSettingEJB;
@@ -68,6 +73,12 @@ public class SalesMB implements Serializable {
     @EJB
     ReceiptEJB receiptEJB;
     
+     @EJB
+    AccountHeadEJB accHeadEJB;
+    
+    @EJB
+    LedgerEJB ledgerEJB;
+    
     private InventoryReceiptModel  inventoryReceiptModel;
     private SalesDetailModel salesDetailModel;
     private List<SalesDetailModel> lstSalesDetails;
@@ -93,7 +104,7 @@ public class SalesMB implements Serializable {
     public List<PartnerModel> getLstSupModels() {
         if(lstSupModels == null)
             lstSupModels = new ArrayList<>();
-       lstSupModels= partnerEJB.findAll();
+       lstSupModels= partnerEJB.findAllbyCustomer();
         return lstSupModels;
     }
 
@@ -364,6 +375,41 @@ public class SalesMB implements Serializable {
             
             lstMaster.add(invMasterModel);
         }
+        
+        AccHead accountHead = null;
+         List<AccHead>  lst = accHeadEJB.findbyAccount("Sales");
+         for(AccHead acc : lst)
+         {
+             if (acc.getAccName().equals("Sales"))
+             {
+                 accountHead = acc;
+             }else
+             {
+                 addDetailMessage("Please Create Account Head With Acc Name Sales"); 
+                 return;
+             }
+         }
+          if(accountHead == null)
+         {
+             addDetailMessage("Please Create Account Head With Acc Name Purchase"); 
+                 return;
+         }
+         
+        Ledger ledger = new Ledger();
+        ledger.setCrAmt(inventoryReceiptModel.getReceiptAmt());
+        ledger.setToAccountHead(accountHead);
+        ledger.setFiscalYear(null);
+        ledger.setAccountHead(partnerEJB.find(inventoryReceiptModel.getSupId().getId()).getAccountHead());
+        ledger.setPostedDate(inventoryReceiptModel.getReceiptDtEn());
+        ledger.setRemarks("Sales To "+inventoryReceiptModel.getSupId().getMemberName());
+        ledger.setCreatedDate(new Date());
+        
+        try {
+            ledgerEJB.postToLedger(ledger,accHeadEJB);
+        } catch (Exception ex) {
+            addDetailMessage("Error Occured ,Please Try again Later "); 
+                 return;
+        }
         inventoryReceiptModel.setInvMasterList(lstMaster);
         receiptEJB.save(inventoryReceiptModel);
         addDetailMessage("Sales Completed");
@@ -389,6 +435,35 @@ public class SalesMB implements Serializable {
             //invMasterModel.setUnitSalePrice(purModel.getSellingPrice());
             
             lstMaster.add(invMasterModel);
+        }
+        
+        AccHead accountHead = null;
+         List<AccHead>  lst = accHeadEJB.findbyAccount("Sales");
+         for(AccHead acc : lst)
+         {
+             if (acc.getAccName().equals("Sales"))
+             {
+                 accountHead = acc;
+             }else
+             {
+                 addDetailMessage("Please Create Account Head With Acc Name Sales"); 
+                 return;
+             }
+         }
+        Ledger ledger = new Ledger();
+        ledger.setDrAmt(inventoryReceiptModel.getReceiptAmt());
+        ledger.setAccountHead(accountHead);
+        ledger.setToAccountHead(partnerEJB.find(inventoryReceiptModel.getSupId().getId()).getAccountHead());
+        ledger.setFiscalYear(null);
+        ledger.setPostedDate(inventoryReceiptModel.getReceiptDtEn());
+        ledger.setRemarks("Sales Return From "+inventoryReceiptModel.getSupId().getMemberName());
+        ledger.setCreatedDate(new Date());
+        
+        try {
+            ledgerEJB.postToLedger(ledger,accHeadEJB);
+        } catch (Exception ex) {
+            addDetailMessage("Error Occured ,Please Try again Later "); 
+                 return;
         }
         inventoryReceiptModel.setInvMasterList(lstMaster);
         receiptEJB.save(inventoryReceiptModel);
@@ -451,5 +526,13 @@ public class SalesMB implements Serializable {
 
     public void setSelectedReceipts(List<InventoryReceiptModel> selectedReceipts) {
         this.selectedReceipts = selectedReceipts;
+    }
+    
+    public void loadCostPrice()
+    {
+        //salesDetailModel.itemProductModel.productId
+         ItemProductModel itm = productEJB.find(salesDetailModel.getItemProductModel().getProductId());
+       InventoryInvoiceModel inv = invoiceEJB.
+         salesDetailModel.setCostPrice(itm.get);
     }
 }

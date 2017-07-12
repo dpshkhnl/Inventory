@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
+                template="#{layoutMB.layout}">
+
+    <ui:define name="title">
+        Sales Details Report
+    </ui:define>
+
+    <ui:define name="body">
+        <f:metadata>
+            <f:viewParam name="id" value="#{accountHeadMB.accHead.accHeadId}" converter="javax.faces.Long"/>
+            <!-- use view action if you are in a Java EE 7 server: <f:viewAction action="#{carFormMB.init()}"/>-->
+            <f:event type="preRenderView" listener="#{accountHeadMB.init}"/>
+        </f:metadata>
+
+        <h:form id="form" prependId="false">
+
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div class="container-fluid">
+                        <div class="row">
+
+                            <div class="col-md-4">
+
+                                <div class="form-group ">
+
+                                    <label for="dateFrom" class="col-sm-4 control-label">
+                                        From
+                                    </label>
+                                    <div class="col-sm-8">
+
+                                        <p:calendar id="dateFrom" size="25"  value="#{reportsMB.dateFrm}" pattern="yyy-MM-dd" />
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+                                    <label for="dateTo" class="col-sm-4 control-label">
+                                        To
+                                    </label>
+                                    <div class="col-sm-8">
+
+                                        <p:calendar id="dateTo" size="25" value="#{reportsMB.dateTo}" pattern="yyy-MM-dd" />
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="route" class="col-sm-4 control-label">
+                                        Route:
+                                    </label>
+
+                                    <div class="col-sm-8">
+                                        <p:selectOneMenu filter="true" filterMatchMode="contains"  id="route" value="#{reportsMB.routeId}">   
+                                            <f:selectItem  itemLabel="Select" itemValue="0" />
+                                            <f:selectItems value="#{reportsMB.lstRoutes}" var="route" itemLabel="#{route.branchName}" itemValue="#{route.branchId}" />
+                                            <p:ajax process="@this route" update="cust"/>  
+                                        </p:selectOneMenu>
+                                    </div></div>
+
+                                <div class="form-group">
+                                    <label for="cust" class="col-sm-4 control-label">
+                                        Customer:
+                                    </label>
+
+                                    <div class="col-sm-8">
+                                        <p:selectOneMenu filter="true" filterMatchMode="contains"  id="cust" value="#{reportsMB.customerId}">   
+                                            <f:selectItem  itemLabel="Select" itemValue="0" />
+                                            <f:selectItems value="#{reportsMB.lstCustomer}" var="cat" itemLabel="#{cat.memberName}(#{cat.contactPerson})" itemValue="#{cat.id}" />
+
+                                        </p:selectOneMenu>
+                                    </div></div>
+
+
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+
+                                        <p:commandButton value="Load Details" action="#{reportsMB.loadSalesDetails()}" update="@form"
+                                                         styleClass="btn-primary"/>
+                                        <p:commandButton value="Reset" action="#{reportsMB.reset()}" update="@form"
+                                                         styleClass="btn-danger"/>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-8">
+                                <p:treeTable value="#{reportsMB.root}" var="trxn">
+                                    <f:facet name="header">
+                                        Sales Details Report
+                                    </f:facet>
+                                       <p:column headerText="S.No" >
+                                        #{rowsn+1}
+                                    </p:column>
+                                    <p:column headerText="Customers" >
+
+                                        <h:outputText value="#{trxn.receiptModel.supId.memberName}" >
+
+                                        </h:outputText> 
+                                    </p:column>
+                                   
+
+                                    <p:column headerText="Receipt Date " >
+
+                                        <h:outputText value="#{trxn.receiptModel.receiptDtEn}" >
+                                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                                        </h:outputText> 
+                                    </p:column>
+
+                                    <p:column headerText="Item" >
+                                        #{trxn.salesDetails.itemProductModel.productCode}
+                                    </p:column>
+                                    
+                                    <p:column headerText="Quantity" >
+                                        #{trxn.salesDetails.outQty}
+                                    </p:column>
+                                    
+                                     <p:column headerText="Unit" >
+                                        #{trxn.salesDetails.unitModel.unitName}
+                                    </p:column>
+                                    
+                                    
+                                    <p:column headerText="Cost Price" >
+                                        
+                                        
+                                        <h:outputText rendered="#{trxn.salesDetails.totalCost != 0}" value="#{trxn.salesDetails.totalCost}" >
+                                           <f:convertNumber type="currency" currencySymbol="Rs." />
+                                        </h:outputText> 
+                                         <h:outputText value="#{trxn.receiptModel.receiptAmt}" >
+                                           <f:convertNumber type="currency" currencySymbol="Rs." />
+                                        </h:outputText> 
+                                       
+                                    </p:column>
+                                    
+                                     <p:column headerText="Sale Price" >
+                                         <h:outputText rendered="#{trxn.salesDetails.costPrice != 0}"  value="#{trxn.receiptModel.receiptAmt}" >
+                                           <f:convertNumber type="currency" currencySymbol="Rs." />
+                                        </h:outputText>
+                                         
+                                         <h:outputText value="#{trxn.salesDetails.costPrice}" >
+                                           <f:convertNumber type="currency" currencySymbol="Rs." />
+                                        </h:outputText> 
+
+                                       
+                                    </p:column>
+
+
+
+                                </p:treeTable>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </h:form>
+
+
+    </ui:define>
+
+</ui:composition>

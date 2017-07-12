@@ -77,17 +77,7 @@
                         <p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
 
 
-                        <f:facet name="header">
-                            Find Route by ID <p:inputText id="inptId" value="#{routeMB.routeManagementModel.branchId}"/>
-                            <p:spacer height="5"/>
-                            <p:commandButton id="brFind"
-                                             value="Find"
-                                             action="#{routeMB.findRouteById(routeMB.routeManagementModel.branchId)}"
-                                             process="@form"
-                                             update="@form"
-                                             styleClass="btn-flat bg-black"
-                                             partialSubmit="true"/>
-                        </f:facet>
+                        
                         <p:column selectionMode="multiple" width="5%" styleClass="align-center"/>
 
                         <p:column headerText="Branch Name" filterBy="#{c.branchName}" sortBy="#{c.branchName}"

@@ -21,6 +21,20 @@ import static np.info.dpshkhnl.util.Utils.addDetailMessage;
 import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.util.Faces;
 import org.primefaces.model.LazyDataModel;
+import static com.github.adminfaces.template.util.Assert.has;
+import static np.info.dpshkhnl.util.Utils.addDetailMessage;
+import static com.github.adminfaces.template.util.Assert.has;
+import static np.info.dpshkhnl.util.Utils.addDetailMessage;
+import static com.github.adminfaces.template.util.Assert.has;
+import static np.info.dpshkhnl.util.Utils.addDetailMessage;
+import static com.github.adminfaces.template.util.Assert.has;
+import static np.info.dpshkhnl.util.Utils.addDetailMessage;
+import static com.github.adminfaces.template.util.Assert.has;
+import static np.info.dpshkhnl.util.Utils.addDetailMessage;
+import static com.github.adminfaces.template.util.Assert.has;
+import static np.info.dpshkhnl.util.Utils.addDetailMessage;
+import static com.github.adminfaces.template.util.Assert.has;
+import static np.info.dpshkhnl.util.Utils.addDetailMessage;
 
 /**
  *
@@ -92,7 +106,7 @@ public class RouteMB implements Serializable{
     public void setFilter(Filter<RouteManagementModel> filter) {
         this.filter = filter;
     }
-     public void saveRoute()
+     public void saveRoute() throws IOException
     {
         
          String msg;
@@ -104,6 +118,8 @@ public class RouteMB implements Serializable{
             msg = "Route " + routeManagementModel.getBranchName() + " updated successfully";
         }
         addDetailMessage(msg);
+        Faces.getFlash().setKeepMessages(true);
+            Faces.redirect("/pages/admin/route/route-list.xhtml");
     }
     public boolean isNew() {
         return routeManagementModel == null || routeManagementModel.getBranchId()== 0;
@@ -116,11 +132,11 @@ public class RouteMB implements Serializable{
     
      public void remove() throws IOException {
         if (has(routeManagementModel) && has(routeManagementModel.getBranchId())) {
-          routeEJB.delete(routeManagementModel,RouteManagementModel.class);
+          routeEJB.delete(routeManagementModel.getBranchId(),RouteManagementModel.class);
             addDetailMessage("Account Head " + routeManagementModel.getBranchName()
                     + " removed successfully");
             Faces.getFlash().setKeepMessages(true);
-            Faces.redirect("route-list.xhtml");
+            Faces.redirect("/pages/admin/route/route-list.xhtml");
         }
     }
      

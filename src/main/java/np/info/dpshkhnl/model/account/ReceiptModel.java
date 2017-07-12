@@ -59,30 +59,11 @@ public class ReceiptModel implements Serializable {
 	@OneToMany(mappedBy="receiptModel", cascade=CascadeType.ALL)
 	private List<ReceiptDetailsModel> receiptDetailsList;
 
-	@ManyToOne
-	//@JoinColumn(name="jv_no", referencedColumnName="jv_no")
-	@JoinColumns({@JoinColumn(name="jv_no", referencedColumnName="jv_no"), @JoinColumn(name="fy_id",referencedColumnName="fy_id",insertable=false,updatable=false),@JoinColumn(name="jv_type",referencedColumnName="jv_type",insertable=false,updatable=false)})
-	private JournalVoucherModel journalVoucher;
-
 
 	@Column(name="trxn_from" ,length=20)
 	private String trxnFrom;
 
-	/*@ManyToOne
-	@JoinColumn(name="student_id", referencedColumnName="student_id")
-	private StudentModel studentModel;
 
-	@ManyToOne
-	@JoinColumn(name="mem_id", referencedColumnName="mem_no")
-	private  MemberInformationModel member;
-
-	@ManyToOne
-	@JoinColumn(name="firm_id", referencedColumnName="firm_id")
-	private FirmRegistrationModel firm;
-
-	@ManyToOne
-	@JoinColumn(name="emp_id", referencedColumnName="employee_id")
-	private Employee employee;*/
 
 	@Column(name="receipt_date")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -205,23 +186,7 @@ public class ReceiptModel implements Serializable {
 		this.receiptDetailsList = receiptDetailsList;
 	}
 
-	/**
-	 * @return the journalVoucher
-	 */
-	public JournalVoucherModel getJournalVoucher() {
-		return journalVoucher;
-	}
-
-	/**
-	 * @param journalVoucher the journalVoucher to set
-	 */
-	public void setJournalVoucher(JournalVoucherModel journalVoucher) {
-		this.journalVoucher = journalVoucher;
-	}
-
-	/**
-	 * @return the receiptNo
-	 */
+	
 	public int getReceiptNo() {
 		return receiptNo;
 	}

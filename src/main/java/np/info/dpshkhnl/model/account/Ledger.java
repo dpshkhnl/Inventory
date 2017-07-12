@@ -5,22 +5,17 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
 //import com.sun.tools.xjc.reader.xmlschema.bindinfo.BIConversion.User;
@@ -34,13 +29,9 @@ import javax.persistence.Version;
  */
 
 @Entity
-@Table(name = "ledger_mcg", uniqueConstraints = { @UniqueConstraint(name = "unqLedgerConstraint", columnNames = {
-		"led_id", "fy_id", "jv_no", "jv_type" }) })
+@Table(name = "ledger")
 public class Ledger implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	public static final String LIST_FOR_LEDGER_REPORT = "LedgerMcg.forLedgerReport";
 	public static final String FIND_BROUGHT_DOWN_AMOUNT = "LedgerMcg.broughtDownAmt";
@@ -55,20 +46,7 @@ public class Ledger implements Serializable {
 	@Column(name = "led_id")
 	private long ledId;
 
-	/*
-	 * @ManyToOne(fetch=FetchType.LAZY) //@JoinColumn(name="jv_no",
-	 * referencedColumnName="jv_no")
-	 * 
-	 * @JoinColumns({@JoinColumn(name="jv_no", referencedColumnName="jv_no"),
-	 * 
-	 * @JoinColumn(name="fy_id",referencedColumnName="fy_id")})
-	 */
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumns({
-			@JoinColumn(name = "jv_no", referencedColumnName = "jv_no"),
-			@JoinColumn(name = "fy_id", referencedColumnName = "fy_id", insertable = false, updatable = false),
-			@JoinColumn(name = "jv_type", referencedColumnName = "jv_type", insertable = false, updatable = false) })
-	private JournalVoucherModel journalVourcher;
+	
 
 	@OneToOne
 	@JoinColumn(name = "acc_code_id", referencedColumnName = "acc_head_id")
@@ -94,16 +72,13 @@ public class Ledger implements Serializable {
 	@Column(name = "remarks")
 	private String remarks;
 
-	@Column(name = "br_id")
-	private int brId;
+	@Column(name = "ref_no")
+	private String refNo;
 
 	@ManyToOne
 	@JoinColumn(name = "fy_id", referencedColumnName = "fy_id")
 	private FiscalYrModel fiscalYear;
 
-	@ManyToOne
-	@JoinColumn(name = "jv_type", referencedColumnName = "cv_id")
-	private CodeValue jvType;
 
 	@Column(name = "is_opening")
 	private int isOpening;
@@ -201,22 +176,6 @@ public class Ledger implements Serializable {
 		this.toAccountHead = toAccountHead;
 	}
 
-	public int getBrId() {
-		return brId;
-	}
-
-	public void setBrId(int brId) {
-		this.brId = brId;
-	}
-
-	/*
-	 * public FiscalYrModel getFiscalYear() { return fiscalYear; }
-	 */
-
-	/*
-	 * public void setFiscalYear(FiscalYrModel fiscalYear) { this.fiscalYear =
-	 * fiscalYear; }
-	 */
 
 	public int getIsOpening() {
 		return isOpening;
@@ -224,47 +183,6 @@ public class Ledger implements Serializable {
 
 	public void setIsOpening(int isOpening) {
 		this.isOpening = isOpening;
-	}
-
-	/*
-	 * public User getPostedBy() { return postedBy; }
-	 */
-
-	/*
-	 * public void setPostedBy(User postedBy) { this.postedBy = postedBy; }
-	 */
-
-	/*
-	 * public User getUpdatedBy() { return updatedBy; }
-	 */
-
-	/*
-	 * public void setUpdatedBy(User updatedBy) { this.updatedBy = updatedBy; }
-	 */
-
-	/*
-	 * public JournalVoucherModel getJournalVourcher() { return journalVourcher;
-	 * }
-	 */
-
-	/*
-	 * public void setJournalVourcher(JournalVoucherModel journalVourcher) {
-	 * this.journalVourcher = journalVourcher; }
-	 */
-
-	/**
-	 * @return the jvType
-	 */
-	public CodeValue getJvType() {
-		return jvType;
-	}
-
-	/**
-	 * @param jvType
-	 *            the jvType to set
-	 */
-	public void setJvType(CodeValue jvType) {
-		this.jvType = jvType;
 	}
 
 	@Override
@@ -291,14 +209,6 @@ public class Ledger implements Serializable {
 	@PreUpdate
 	protected void onUpdate() {
 		updatedDate = new Date();
-	}
-
-	public void setJournalVourcher(JournalVoucherModel journalVourcher) {
-		this.journalVourcher = journalVourcher;
-	}
-
-	public JournalVoucherModel getJournalVourcher() {
-		return journalVourcher;
 	}
 
 	/**
@@ -354,5 +264,13 @@ public class Ledger implements Serializable {
 	public FiscalYrModel getFiscalYear() {
 		return fiscalYear;
 	}
+
+    public String getRefNo() {
+        return refNo;
+    }
+
+    public void setRefNo(String refNo) {
+        this.refNo = refNo;
+    }
 
 }

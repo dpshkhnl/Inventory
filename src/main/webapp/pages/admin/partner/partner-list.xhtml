@@ -40,9 +40,7 @@
                             <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>
                         </p:commandButton>
                         <p:spacer width="5"/>
-           <p:commandButton value="View selected" update="@(.ui-dialog)" styleClass="btn-info"
-                                         disabled="#{empty partnerMB.selectedValue  or partnerMB.selectedValue  == 0}"
-                                         oncomplete="PF('selectedCars').show()" icon="fa fa-search"/>
+          
                     </div>
 
                     <p:splitButton value="New" action="partner-form?faces-redirect=true"
@@ -77,17 +75,7 @@
                         <p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
 
 
-                        <f:facet name="header">
-                            Find partner by ID <p:inputText id="inptId" value="#{partnerMB.partnerModel.id}"/>
-                            <p:spacer height="5"/>
-                            <p:commandButton id="brFind"
-                                             value="Find"
-                                             action="#{partnerMB.findPartnerById(partnerMB.partnerModel.id)}"
-                                             process="@form"
-                                             update="@form"
-                                             styleClass="btn-flat bg-black"
-                                             partialSubmit="true"/>
-                        </f:facet>
+                       
                         <p:column selectionMode="multiple" width="5%" styleClass="align-center"/>
 
                         <p:column headerText="Name" filterBy="#{c.memberName}" sortBy="#{c.memberName}"
@@ -111,6 +99,16 @@
                         <p:column headerText="Contact No" sortBy="#{c.memberContactNo}" >
                             
                             #{c.memberContactNo}
+                        </p:column>
+                        
+                        <p:column headerText="Receivable Amount" sortBy="#{c.accountHead.drBalance}" >
+                            
+                            #{c.accountHead.drBalance}
+                        </p:column>
+                        
+                        <p:column headerText="Payable Amount" sortBy="#{c.accountHead.crBalance}" >
+                            
+                            #{c.accountHead.crBalance}
                         </p:column>
                     </p:dataTable>
                 </div>

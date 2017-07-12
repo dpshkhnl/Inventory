@@ -42,22 +42,7 @@
                                          process="@this"
                                          icon="fa fa-close"/>
                     </div>
-                    <p:splitButton value="Save" action="#{partnerMB.savePartner()}" update="@form"
-                                   icon="fa fa-check"
-                                   styleClass="hidden-md hidden-lg btn-primary">
-                        <p:menuitem value="Reset" action="#{partnerMB.clear}"
-                                    process="@this" update="@form" rendered="#{partnerMB.isNew()}"
-                                    resetValues="true" icon="fa fa-refresh"/>
-                        <p:menuitem value="Delete" action="#{partnerMB.remove}" process="@this"
-                                    rendered="#{not partnerMB.isNew()}" icon="fa fa-trash"
-                                 >
-                            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>
-                        </p:menuitem>
-                        <p:separator/>
-                        <p:menuitem value="Back" action="partner-list?faces-redirect=true"
-                                    process="@this" immediate="true"
-                                    icon="fa fa-close"/>
-                    </p:splitButton>
+                    
 
                     <p:separator/>
 
@@ -68,6 +53,7 @@
                         </div>
                            
                             <div class="ui-g-12">
+                                
                                 <p:selectBooleanCheckbox itemLabel ="Customer" id="chkCustomer" value="#{partnerMB.partnerModel.customer}"/>
                                 <p:selectBooleanCheckbox itemLabel="Vendor" id="chkVendor" value="#{partnerMB.partnerModel.supplier}"/>
                         </div>
@@ -77,14 +63,14 @@
                             <p:outputLabel for="name" value="Name"/>
                         </div>
                         <div class="ui-g-12">
-                            <p:inputText id="name" value="#{partnerMB.partnerModel.memberName}" 
+                            <p:inputText id="name" required="true" requiredMessage="Name Required" value="#{partnerMB.partnerModel.memberName}" 
                                           />
                         </div>
                         <div class="ui-g-12">
                             <p:outputLabel value="Address" for="address"/>
                         </div>
                         <div class="ui-g-12">
-                            <p:inputText id="address" value="#{partnerMB.partnerModel.memberAddress}"/>
+                            <p:inputText id="address" required="true" requiredMessage="Name Required" value="#{partnerMB.partnerModel.memberAddress}"/>
                         </div>
                         <div class="ui-g-12">
                             <p:outputLabel value="Contact Person" for="person"/>
@@ -104,37 +90,20 @@
                         </div>
                         <div class="ui-g-12">
                            
-                            <p:selectOneMenu class="form-data-value font-1 input-width-90 required" id="route" value="#{partnerMB.partnerModel.route.branchId}">   
+                            <p:selectOneMenu class="form-data-value font-1 input-width-90 required" required="true" requiredMessage="Route Required" id="route" value="#{partnerMB.partnerModel.route.branchId}">   
                                 <f:selectItem  itemLabel="Select" itemValue="0" />
                                 <f:selectItems value="#{partnerMB.lstRoutes}" var="route" itemLabel="#{route.branchName}" itemValue="#{route.branchId}" />
                                 
                             </p:selectOneMenu>
                         </div>
                         
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Account Receivable :" for="accRecv"/>
+                   <div class="ui-g-12">
+                             <p:outputLabel value="Opening Balance" for="openBalance"/>
                         </div>
-                        <div class="ui-g-12">
                            
-                            <p:selectOneMenu class="form-data-value font-1 input-width-90 required" id="accRecv" value="#{partnerMB.partnerModel.accountReceivable.accHeadId}">   
-                                <f:selectItem  itemLabel="Select" itemValue="0" />
-                                <f:selectItems value="#{partnerMB.lstAccHeads}" var="accHead" itemLabel="#{accHead.accName}" itemValue="#{accHead.accHeadId}" />
-                                
-                            </p:selectOneMenu>
+                            <div class="ui-g-12">
+                                <p:inputText id="openBalance" value="#{partnerMB.openingBal}"/>
                         </div>
-                        
-                        <div class="ui-g-12">
-                            <p:outputLabel value="Account Payable :" for="accPay"/>
-                        </div>
-                        <div class="ui-g-12">
-                           
-                            <p:selectOneMenu class="form-data-value font-1 input-width-90 required" id="accPay" value="#{partnerMB.partnerModel.accountPayable.accHeadId}">   
-                                <f:selectItem  itemLabel="Select" itemValue="0" />
-                                  <f:selectItems value="#{partnerMB.lstAccHeads}" var="accHead1" itemLabel="#{accHead1.accName}" itemValue="#{accHead1.accHeadId}" />
-                                
-                            </p:selectOneMenu>
-                        </div>
-                        
                         
                         <div class="ui-g-12">
                              <p:outputLabel value="Pan No" for="panNo"/>
@@ -160,8 +129,8 @@
                                 <p:inputText id="remarks" value="#{partnerMB.partnerModel.remarks}"/>
                         </div>
                         </div>
-                        
-                        
+                    
+                    
                     </div>
                 </div>
             

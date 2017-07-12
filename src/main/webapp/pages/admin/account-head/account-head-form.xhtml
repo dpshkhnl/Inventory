@@ -93,18 +93,12 @@
                             <p:outputLabel value="Account Type:" for="accType"/>
                         </div>
                         <div class="ui-g-12">
-                           
-                            <p:selectOneMenu class="form-data-value font-1 input-width-90 required" id="accType" value="#{accountHeadMB.accHead.accType}">   
+                            <p:selectOneMenu class="form-data-value font-1 input-width-90 required" id="accType" value="#{accountHeadMB.accHead.accType.accHeadId}">   
                                 <f:selectItem  itemLabel="Select" itemValue="0" />
-                                <f:selectItem  itemLabel="Receivable" itemValue="1" />
-                                <f:selectItem  itemLabel="Payable" itemValue="2" />
-                                <f:selectItem  itemLabel="Current Liabilities" itemValue="3" />
-                                <f:selectItem  itemLabel="Income" itemValue="4" />
-                                <f:selectItem  itemLabel="Bank and Cash" itemValue="5" />
-                                <f:selectItem  itemLabel="Current Assets" itemValue="6" />
-                                <f:selectItem  itemLabel="Expenses" itemValue="7" />
+                                <f:selectItems value="#{accountHeadMB.lstAllAccHead}" var="accHead" itemLabel="#{accHead.accName}" itemValue="#{accHead.accHeadId}" />
                                 
                             </p:selectOneMenu>
+                          
                         </div>
                        <div class="ui-g-12">
                             <p:outputLabel value="Remarks" for="remarks"/>
