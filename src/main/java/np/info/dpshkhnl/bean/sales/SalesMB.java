@@ -532,7 +532,7 @@ public class SalesMB implements Serializable {
     {
         //salesDetailModel.itemProductModel.productId
          ItemProductModel itm = productEJB.find(salesDetailModel.getItemProductModel().getProductId());
-       InventoryInvoiceModel inv = invoiceEJB.
-         salesDetailModel.setCostPrice(itm.get);
+     //  InventoryInvoiceModel inv = invoiceEJB.
+      //   salesDetailModel.setCostPrice(itm.get);
     }
 }
