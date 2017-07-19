@@ -20,7 +20,7 @@ public class UnitSettingEJB extends GenericDAO<UnitModel> {
 	public UnitSettingEJB() {
 		super(UnitModel.class);
 }
-    private List<UnitModel> parentUnitLst = new ArrayList<>();
+    
         public int getUnitCountOfAllParent(UnitModel unitModel) {
 		int unitCount = unitModel.getUnitCount();
 		List<UnitModel> parentLst = this.getAllParentUnit(unitModel
@@ -38,8 +38,10 @@ public class UnitSettingEJB extends GenericDAO<UnitModel> {
 	}
         
         public List<UnitModel> getAllParentUnit(int unitId) {
+            
 		UnitModel parentUnit = super.find(unitId);
 		UnitModel comboModle;
+                 List<UnitModel> parentUnitLst = new ArrayList<>();
 		if (parentUnit.getParentUnitId() == 0) {
 			return parentUnitLst;
 		} else {

@@ -111,11 +111,7 @@
                         </p:column>
                         
                         <p:column headerText="Item Code" sortBy="#{c.catId.catName}" filterBy="#{c.catId.catName}">
-                            <f:facet name="filter">
-                                <p:inputText value="#{itemTypeMB.filter.entity.catId.catName}">
-                                    <p:ajax process="@this" update="@none" oncomplete="PF('carsTable').filter()"/>
-                                </p:inputText>
-                            </f:facet>
+                           
                            #{c.catId.catName}
                         </p:column>
 

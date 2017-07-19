@@ -6,7 +6,6 @@
 package np.info.dpshkhnl.bean.admin;
 
 import com.github.adminfaces.template.exception.BusinessException;
-import static com.github.adminfaces.template.util.Assert.has;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,25 +13,10 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import np.info.dpshkhnl.infra.model.Filter;
-import np.info.dpshkhnl.model.account.AccHead;
 import np.info.dpshkhnl.model.admin.RouteManagementModel;
 import np.info.dpshkhnl.service.admin.RouteEJB;
-import static np.info.dpshkhnl.util.Utils.addDetailMessage;
 import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.util.Faces;
-import org.primefaces.model.LazyDataModel;
-import static com.github.adminfaces.template.util.Assert.has;
-import static np.info.dpshkhnl.util.Utils.addDetailMessage;
-import static com.github.adminfaces.template.util.Assert.has;
-import static np.info.dpshkhnl.util.Utils.addDetailMessage;
-import static com.github.adminfaces.template.util.Assert.has;
-import static np.info.dpshkhnl.util.Utils.addDetailMessage;
-import static com.github.adminfaces.template.util.Assert.has;
-import static np.info.dpshkhnl.util.Utils.addDetailMessage;
-import static com.github.adminfaces.template.util.Assert.has;
-import static np.info.dpshkhnl.util.Utils.addDetailMessage;
-import static com.github.adminfaces.template.util.Assert.has;
-import static np.info.dpshkhnl.util.Utils.addDetailMessage;
 import static com.github.adminfaces.template.util.Assert.has;
 import static np.info.dpshkhnl.util.Utils.addDetailMessage;
 
@@ -119,7 +103,7 @@ public class RouteMB implements Serializable{
         }
         addDetailMessage(msg);
         Faces.getFlash().setKeepMessages(true);
-            Faces.redirect("/pages/admin/route/route-list.xhtml");
+            Faces.redirect("pages/admin/route/route-list.xhtml");
     }
     public boolean isNew() {
         return routeManagementModel == null || routeManagementModel.getBranchId()== 0;
@@ -136,7 +120,7 @@ public class RouteMB implements Serializable{
             addDetailMessage("Account Head " + routeManagementModel.getBranchName()
                     + " removed successfully");
             Faces.getFlash().setKeepMessages(true);
-            Faces.redirect("/pages/admin/route/route-list.xhtml");
+            Faces.redirect("pages/admin/route/route-list.xhtml");
         }
     }
      
