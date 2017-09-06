@@ -101,12 +101,12 @@
                                     </p:column>
 
                                     <p:column headerText="Selling Amount" >
-                                        #{trxn.perCost}
+                                        #{trxn.outQty*trxn.perCost}
 
                                     </p:column>
 
                                     <p:column headerText="Cost Amount" >
-                                        #{trxn.costPrice}
+                                        #{trxn.outQty*trxn.costPrice}
 
                                     </p:column>
 

@@ -81,15 +81,19 @@ public class PartnerEJB extends GenericDAO<PartnerModel> {
     
     public List<PartnerModel> findAllCustomerCreditByToDate(Date toDate ,int routeId, int customerId) {
         String qry = "";
+        
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        qry = "SELECT * from ( SELECT acc_code_id,(SUM(dr_amt)-SUM(cr_amt)) as amount "
-                + " FROM ledger where posted_date <'"+sdf.format(toDate)+"' GROUP BY acc_code_id)t where t.amount > 0  ;";
+        qry ="SELECT * from (SELECT acc_head_id,(SUM(dr_bal)-SUM(cr_bal)) as amount\n" +
+" FROM acc_heads where acc_type = 1 GROUP BY acc_head_id)t where t.amount > 0  ";
+//        qry = "SELECT * from ( SELECT acc_code_id,(SUM(dr_amt)-SUM(cr_amt)) as amount "
+//                + " FROM ledger where posted_date <'"+sdf.format(toDate)+"' GROUP BY acc_code_id)t where t.amount > 0  ;";
+//        
         
-        
-        System.out.println(qry);
+        System.out.println("hello"+qry);
         List<PartnerModel> lstPartner = new ArrayList<>();
         List<Object> objects = (List<Object>) DirectSqlUtils
 				.getValueListFromTable(qry);
+        
 		for (Object obj : objects) {
 			Object[] values = (Object[]) obj;
                        int accountid =  (Integer)values[0];

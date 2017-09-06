@@ -45,26 +45,12 @@
                                          oncomplete="PF('selectedCars').show()" icon="fa fa-search"/>
                     </div>
 
-                    <p:splitButton value="New" action="unit-setting-form?faces-redirect=true"
-                                   icon="fa fa-plus"
-                                   styleClass="hidden-md hidden-lg btn-primary">
-                        <p:menuitem value="Delete Selected" action="#{routeMB.delete}"
-                                    process="@this" update="@form"
-                                    disabled="#{empty brandNameMB.selectedValue or brandNameMB.selectedValue.size() == 0}"
-                                    icon="fa fa-trash">
-                            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>
-                        </p:menuitem>
-                        <p:menuitem value="View selected" update="@(.ui-dialog)"
-                                    oncomplete="PF('selectedCars').show()"
-                                    disabled="#{empty brandNameMB.selectedValue or brandNameMB.selectedValue.size() == 0}"
-                                    icon="fa fa-search"
-                        />
-                    </p:splitButton>
+                   
 
                     <p:separator/>
                     <p:dataTable widgetVar="carsTable" var="c" value="#{brandNameMB.lstBrands}" rows="5"
-                                 rowKey="#{c.brandNameId}" lazy="true" paginator="true"
-                                 filteredValue="#{brandNameMB.filteredValue}"
+                                 rowKey="#{c.brandNameId}"  paginator="true"
+                                 
                                  paginatorPosition="bottom" selection="#{brandNameMB.selectedValue}"
                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
                                  currentPageReportTemplate="[ {startRecord} to {endRecord} of {totalRecords} ]"
@@ -77,29 +63,18 @@
                         <p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
 
 
-                        <f:facet name="header">
-                            Find Brand by ID <p:inputText id="inptId" value="#{brandNameMB.brandName.brandNameId}"/>
-                            <p:spacer height="5"/>
-                            <p:commandButton id="brFind"
-                                             value="Find"
-                                             action="#{brandNameMB.findBrandById(brandNameMB.brandName.brandNameId)}"
-                                             process="@form"
-                                             update="@form"
-                                             styleClass="btn-flat bg-black"
-                                             partialSubmit="true"/>
-                        </f:facet>
+                        
                         <p:column selectionMode="multiple" width="5%" styleClass="align-center"/>
 
                         <p:column headerText="Brand Name" filterBy="#{c.brandName}" sortBy="#{c.brandName}"
-                                  filterMatchMode="contains">
-                            <f:facet name="filter">
-
-                            </f:facet>
+                                  filterMatchMode="startsWith">
+                           
                             <p:link value="#{c.brandName}" outcome="brand-name-form.xhtml" >
                                 <f:param name="id" value="#{c.brandNameId}"/>
                             </p:link>
 
                         </p:column>
+                       
 
                         <p:column headerText="Description" sortBy="#{c.brandDescription}" >
                             

@@ -62,9 +62,10 @@
                     </p:splitButton>
 
                     <p:separator/>
+                    
                     <p:dataTable widgetVar="carsTable" var="c" value="#{itemProductMB.lstItemProduct}" rows="5"
-                                 rowKey="#{c.productId}" lazy="true" paginator="true"
-                                 filteredValue="#{itemProductMB.filteredValue}"
+                                 rowKey="#{c.productId}"  paginator="true" 
+                                
                                  paginatorPosition="bottom" selection="#{itemProductMB.selectedValue}"
                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
                                  currentPageReportTemplate="[ {startRecord} to {endRecord} of {totalRecords} ]"
@@ -77,29 +78,29 @@
                         <p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
 
 
-                        <f:facet name="header">
-                            Find Brand by ID <p:inputText id="inptId" value="#{itemProductMB.itemProductModel.productId}"/>
-                            <p:spacer height="5"/>
-                            <p:commandButton id="brFind"
-                                             value="Find"
-                                             action="#{itemProductMB.findItemTypeById(itemProductMB.itemProductModel.productId)}"
-                                             process="@form"
-                                             update="@form"
-                                             styleClass="btn-flat bg-black"
-                                             partialSubmit="true"/>
-                        </f:facet>
+                      
                         <p:column selectionMode="multiple" width="5%" styleClass="align-center"/>
 
                         <p:column headerText="Product Code" filterBy="#{c.productCode}" sortBy="#{c.productCode}"
-                                  filterMatchMode="contains">
-                            <f:facet name="filter">
-
-                            </f:facet>
+                                  filterMatchMode="startsWith">
+                           
                             <p:link value="#{c.productCode}" outcome="item-product-form.xhtml" >
                                 <f:param name="id" value="#{c.productId}"/>
                             </p:link>
 
                         </p:column>
+                        
+                        
+                        
+                        <p:column headerText="Name1" filterBy="#{c.productCode}" sortBy="#{c.productCode}"
+                                  filterMatchMode="startsWith">
+                          
+                            <p:link value="#{c.productCode}" outcome="item-product-form.xhtml" >
+                                <f:param name="id" value="#{c.productId}"/>
+                            </p:link>
+
+                        </p:column>
+                        
                         
                         <p:column headerText="Item Code" sortBy="#{c.itemId.itemTypeName}" filterBy="#{c.itemId.itemTypeName}">
                             

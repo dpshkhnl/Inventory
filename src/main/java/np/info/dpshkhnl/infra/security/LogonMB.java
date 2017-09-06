@@ -36,9 +36,19 @@ public class LogonMB extends AdminSession implements Serializable {
 
     public void login() throws IOException {
         currentUser = email;
-        addDetailMessage("Logged in successfully as <b>" + email + "</b>");
+        System.out.println("np.info.dpshkhnl.infra.security.LogonMB.login()");
+        if(email.equals("manoj@shreetraders")&&password.equals("shreetraders")){
+            
+            addDetailMessage("Logged in successfully as <b>" + email + "</b>");
         Faces.getExternalContext().getFlash().setKeepMessages(true);
-        Faces.redirect("index.xhtml");
+        Faces.redirect("pages/dashboard.xhtml");
+        }else
+        {
+            addDetailMessage("Incorrect Username or password");
+        Faces.getExternalContext().getFlash().setKeepMessages(true);
+        
+        }
+        
     }
 
     @Override

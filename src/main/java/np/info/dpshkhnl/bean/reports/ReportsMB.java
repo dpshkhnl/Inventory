@@ -72,6 +72,8 @@ public class ReportsMB implements Serializable {
     private List<Ledger> lstLedger;
     private TreeNode root;
     private List<ReportCustomModel> lstSalesDet;
+    private double totAmt;
+    private double amt;
     public int getCustomerId() {
         return customerId;
     }
@@ -239,6 +241,14 @@ public class ReportsMB implements Serializable {
         lstCustomerCredit = null;
         getLstCustomerCredit();
         lstCustomerCredit = partnerEJB.findAllCustomerCreditByToDate(dateTo,routeId,customerId);
+        totAmt = 0.0;
+        amt =0.0;
+        for( PartnerModel pt : lstCustomerCredit)
+        {
+            totAmt+=Double.valueOf(pt.getRemarks());
+            amt+=Double.valueOf(pt.getRemarks());
+        }
+        
     }
 
     public List<PartnerModel> getLstCustomerCredit() {
@@ -317,5 +327,21 @@ public class ReportsMB implements Serializable {
 
     public void setLstSalesDet(List<ReportCustomModel> lstSalesDet) {
         this.lstSalesDet = lstSalesDet;
+    }
+
+    public double getTotAmt() {
+        return totAmt;
+    }
+
+    public void setTotAmt(double totAmt) {
+        this.totAmt = totAmt;
+    }
+
+    public double getAmt() {
+        return amt;
+    }
+
+    public void setAmt(double amt) {
+        this.amt = amt;
     }
 }

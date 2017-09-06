@@ -79,7 +79,7 @@ public class PurchaseMB implements Serializable {
     private InventoryInvoiceModel inventoryInvoiceModel;
      private List<InventoryInvoiceModel> lstInvoice;
      private List<InventoryInvoiceModel> selectedInvoice;
-     private boolean openingStock;
+     private boolean openingStock =false;
 
     public List<InventoryInvoiceModel> getLstInvoice() {
          if(lstInvoice == null)
@@ -286,15 +286,16 @@ public class PurchaseMB implements Serializable {
             purModel.setInventoryInvoiceModel(inventoryInvoiceModel);
             InventoryMasterModel invMasterModel = new InventoryMasterModel();
             invMasterModel.setProductId(purModel.getItemProductModel());
-            invMasterModel.setInQty(unitEJB.getUnitCountOfAllParent(purModel.getUnitModel())*purModel.getInQty());
+            invMasterModel.setInQty(unitEJB.getUnitCountOfAllParent(purModel.getUnitModel().getUnitId())*purModel.getInQty());
             invMasterModel.setInvInvoiceStk(purModel.getInventoryInvoiceModel());
             invMasterModel.setTotalCost(purModel.getTotalCost());
-            
+            invMasterModel.setUnitCostPrice(purModel.getPerCost());
             invMasterModel.setUnitSalePrice(purModel.getSellingPrice());
             
             lstMaster.add(invMasterModel);
         }
-        if(openingStock){
+        inventoryInvoiceModel.setInvMasterList(lstMaster);
+        if(!openingStock){
         AccHead accountHead = null;
          List<AccHead>  lst = accHeadEJB.findbyAccount("Purchases");
          for(AccHead acc : lst)
@@ -313,7 +314,7 @@ public class PurchaseMB implements Serializable {
              addDetailMessage("Please Create Account Head With Acc Name Purchase"); 
                  return;
          }
-        inventoryInvoiceModel.setInvMasterList(lstMaster);
+        
         Ledger ledger = new Ledger();
         ledger.setDrAmt(inventoryInvoiceModel.getInvAmt());
         ledger.setAccountHead(accountHead);
@@ -346,10 +347,10 @@ public class PurchaseMB implements Serializable {
             purModel.setInventoryInvoiceModel(inventoryInvoiceModel);
             InventoryMasterModel invMasterModel = new InventoryMasterModel();
             invMasterModel.setProductId(purModel.getItemProductModel());
-            invMasterModel.setOutQty(unitEJB.getUnitCountOfAllParent(purModel.getUnitModel())*purModel.getRetQty());
+            invMasterModel.setOutQty(unitEJB.getUnitCountOfAllParent(purModel.getUnitModel().getUnitId())*purModel.getRetQty());
             invMasterModel.setInvInvoiceStk(purModel.getInventoryInvoiceModel());
             invMasterModel.setTotalCost(purModel.getTotalCost());
-            
+            invMasterModel.setUnitId(purModel.getUnitModel());
             //invMasterModel.setUnitSalePrice(purModel.getSellingPrice());
             
             lstMaster.add(invMasterModel);

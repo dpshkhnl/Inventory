@@ -73,6 +73,15 @@ public class PartnerMB implements Serializable{
         getPartnerModel();
         if (has(partnerModel.getId())) {
             partnerModel = partnerEJB.find(partnerModel.getId());
+           if(partnerModel !=null && partnerModel.getAccountHead()!=null){
+               System.out.println("np.info.dpshkhnl.bean.admin.PartnerMB.init() Hello ");
+               if(partnerModel.getCustomer())
+                openingBal= partnerModel.getAccountHead().getDrBalance();
+               else if (partnerModel.getSupplier())
+               openingBal= partnerModel.getAccountHead().getCrBalance();    
+            
+           }
+            
         } 
     }
 
@@ -137,12 +146,12 @@ public class PartnerMB implements Serializable{
     {
         
          String msg;
-        if (partnerModel.getId()== 0) {
+        
             
             if(partnerModel.getCustomer())
             {
                 Accounts acc = accountsEJB.findbyAccountName("Receivable");
-                 partnerModel.getAccountHead().setAccCode(acc.getAccHeadId() +"."+partnerEJB.findMaxPartnerId()+1);
+                 partnerModel.getAccountHead().setAccCode(acc.getAccHeadId() +"."+partnerModel.getMemberName());
                  partnerModel.getAccountHead().setAccName(partnerModel.getMemberName());
                  partnerModel.getAccountHead().setAccType(acc);
                  partnerModel.getAccountHead().setDrBalance(openingBal);
@@ -153,7 +162,7 @@ public class PartnerMB implements Serializable{
             {
                 Accounts acc = accountsEJB.findbyAccountName("Payable");
                  partnerModel.setRoute(null);
-                 partnerModel.getAccountHead().setAccCode(acc.getAccHeadId() +"."+partnerEJB.findMaxPartnerId()+1);
+                 partnerModel.getAccountHead().setAccCode(acc.getAccHeadId() +"."+partnerModel.getMemberName());
                  partnerModel.getAccountHead().setAccName(partnerModel.getMemberName());
                  partnerModel.getAccountHead().setAccType(acc);
                  partnerModel.getAccountHead().setCrBalance(openingBal);
@@ -161,7 +170,7 @@ public class PartnerMB implements Serializable{
                  partnerModel.getAccountHead().setCreatedDate(new Date());
                  partnerModel.getAccountHead().setDrcr("cr");  
             }
-            
+          if (partnerModel.getId()== 0) {  
             partnerEJB.save(partnerModel);
             msg = "Partner  " + partnerModel.getMemberName()+ " created successfully";
         } else {

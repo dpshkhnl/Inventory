@@ -5,7 +5,7 @@
                 template="#{layoutMB.layout}">
 
     <ui:define name="title">
-       Unit
+        Unit
     </ui:define>
 
     <ui:define name="body">
@@ -51,7 +51,7 @@
                                     resetValues="true" icon="fa fa-refresh"/>
                         <p:menuitem value="Delete" action="#{unitSettingMB.remove}" process="@this"
                                     rendered="#{not unitSettingMB.isNew()}" icon="fa fa-trash"
-                                 >
+                                    >
                             <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>
                         </p:menuitem>
                         <p:separator/>
@@ -68,42 +68,48 @@
                         </div>
                         <div class="ui-g-12">
                             <p:inputText id="unitName" value="#{unitSettingMB.unitModel.unitName}" 
-                                          />
+                                         />
                         </div>
                         <div class="ui-g-12">
-                                <p:selectBooleanCheckbox itemLabel ="Primary Unit Type" id="chkCustomer" />
-                               
+                            <p:selectBooleanCheckbox value="#{unitSettingMB.primaryUnit}" itemLabel ="Primary Unit Type" id="chkCustomer">
+                                <p:ajax update="@form"></p:ajax>
+                            </p:selectBooleanCheckbox>
+
                         </div>
                         <div class="ui-g-12">
                             <p:outputLabel value="Remarks" for="remarks"/>
                         </div>
-                        
-                         
-                           
-                            
+
+
+
+
                         <div class="ui-g-12">
                             <p:inputText id="remarks" value="#{unitSettingMB.unitModel.remarks}"/>
                         </div>
                         <div class="ui-g-12">
-                            <p:outputLabel value="Parent Unit" for="parentUnit"/>
+                            <p:outputLabel rendered="#{not unitSettingMB.primaryUnit}" value="Parent Unit" for="parentUnit"/>
                         </div>
                         <div class="ui-g-12">
-                            <p:inputText id="parentUnit" value="#{unitSettingMB.unitModel.parentUnitId}"/>
+                            <p:selectOneMenu rendered="#{not unitSettingMB.primaryUnit}" filter="true" filterMatchMode="contains"  styleClass="form-control" required="true"  id="parentUnit" value="#{unitSettingMB.unitModel.parentUnitId}">   
+                                <f:selectItem  itemLabel="Select" itemValue="0" />
+                                <f:selectItems value="#{purchaseMB.lstUnits}" var="unit" itemLabel="#{unit.unitName}" itemValue="#{unit.unitId}" />
+
+                            </p:selectOneMenu>
                         </div>
                         <div class="ui-g-12">
-                            <p:outputLabel value="Count:" for="count"/>
+                            <p:outputLabel rendered="#{not unitSettingMB.primaryUnit}" value="Count:" for="count"/>
                         </div>
                         <div class="ui-g-12">
-                            <p:inputText id="count" value="#{unitSettingMB.unitModel.unitCount}"/>
+                            <p:inputText id="count" rendered="#{not unitSettingMB.primaryUnit}" value="#{unitSettingMB.unitModel.unitCount}"/>
                         </div>
-                        
-                    
-                        </div>
-                        
-                        
+
+
                     </div>
+
+
                 </div>
-            
+            </div>
+
 
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger">
                 <p:commandButton value="Yes" type="button" styleClass="btn-primary ui-confirmdialog-yes"

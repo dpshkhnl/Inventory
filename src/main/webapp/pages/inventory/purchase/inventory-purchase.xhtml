@@ -23,7 +23,7 @@
                         <p:selectBooleanCheckbox  id="op" label="Opening Stock" value="#{purchaseMB.openingStock}"/>
                             
                         <p:fieldset legend="Supplier " >
-                            <p:selectBooleanCheckbox label="Opening Stock" value="#{purchaseMB.openingStock}"/>
+                            
                             <p:outputLabel for="supplier"  value="Supplier Name:"/>
 
                             <p:selectOneMenu filter="true" filterMatchMode="contains" styleClass="form-control" id="supplier" value="#{purchaseMB.inventoryInvoiceModel.supId.id}">   
@@ -76,7 +76,7 @@
                                 <p:outputLabel for="unit" style="margin-left: 20px"  value="Unit"/>
 
                                 <p:selectOneMenu filter="true" filterMatchMode="contains" style="margin-left: 20px" styleClass="form-control" required="true"  id="unit" value="#{purchaseMB.purchaseDetailModel.unitModel.unitId}">   
-                                    <f:selectItem  itemLabel="Select" itemValue="0" />
+                                    
                                     <f:selectItems value="#{purchaseMB.lstUnits}" var="unit" itemLabel="#{unit.unitName}" itemValue="#{unit.unitId}" />
 
                                 </p:selectOneMenu>

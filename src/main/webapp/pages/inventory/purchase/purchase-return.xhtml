@@ -71,7 +71,7 @@
                                 <p:outputLabel for="unit" style="margin-left: 20px"  value="Unit"/>
 
                                 <p:selectOneMenu filter="true" filterMatchMode="contains" style="margin-left: 20px" styleClass="form-control" required="true"  id="unit" value="#{purchaseMB.purchaseDetailModel.unitModel.unitId}">   
-                                    <f:selectItem  itemLabel="Select" itemValue="0" />
+                                    
                                     <f:selectItems value="#{purchaseMB.lstUnits}" var="unit" itemLabel="#{unit.unitName}" itemValue="#{unit.unitId}" />
 
                                 </p:selectOneMenu>

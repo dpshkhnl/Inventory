@@ -33,6 +33,7 @@ import np.info.dpshkhnl.service.admin.VatSettingEJB;
 import np.info.dpshkhnl.service.product.ItemCategoryEJB;
 import np.info.dpshkhnl.service.product.ItemProductEJB;
 import np.info.dpshkhnl.service.product.ItemTypeEJB;
+import np.info.dpshkhnl.service.purchase.InvMasterEJB;
 import np.info.dpshkhnl.service.purchase.InvoiceEJB;
 import np.info.dpshkhnl.service.sales.ReceiptEJB;
 import static np.info.dpshkhnl.util.Utils.addDetailMessage;
@@ -79,6 +80,9 @@ public class SalesMB implements Serializable {
     @EJB
     LedgerEJB ledgerEJB;
     
+    @EJB
+    InvMasterEJB invMasterEJB;
+    
     private InventoryReceiptModel  inventoryReceiptModel;
     private SalesDetailModel salesDetailModel;
     private List<SalesDetailModel> lstSalesDetails;
@@ -98,6 +102,7 @@ public class SalesMB implements Serializable {
     private double gTotal;
     private double vatAmt;
     private double discountAmt;
+    private String remQnty;
     private List<SalesDetailModel> selectedSalesDet;
     private List<InventoryReceiptModel> selectedReceipts;
     private List<CodeValue> lstStatus;
@@ -367,7 +372,7 @@ public class SalesMB implements Serializable {
             purModel.setInventoryReceiptModel(inventoryReceiptModel);
             InventoryMasterModel invMasterModel = new InventoryMasterModel();
             invMasterModel.setProductId(purModel.getItemProductModel());
-            invMasterModel.setOutQty(unitEJB.getUnitCountOfAllParent(purModel.getUnitModel())*purModel.getOutQty());
+            invMasterModel.setOutQty(unitEJB.getUnitCountOfAllParent(purModel.getUnitModel().getUnitId())*purModel.getOutQty());
             invMasterModel.setInvReceipt(purModel.getInventoryReceiptModel());
             invMasterModel.setTotalCost(purModel.getTotalCost());
             
@@ -423,18 +428,20 @@ public class SalesMB implements Serializable {
         inventoryReceiptModel.setStatus(codeValueEJB.getCodeValueByTypeAndLabel("InvoiceStatus","Sales Return"));
        
         List<InventoryMasterModel> lstMaster = new ArrayList<>();
+        
         for(SalesDetailModel purModel : lstSalesDetails)
         {
+            List<InventoryMasterModel> lstInvMaster = invMasterEJB.findbyProductId(purModel.getItemProductModel().getProductId());
             purModel.setInventoryReceiptModel(inventoryReceiptModel);
-            InventoryMasterModel invMasterModel = new InventoryMasterModel();
-            invMasterModel.setProductId(purModel.getItemProductModel());
-            invMasterModel.setOutQty(unitEJB.getUnitCountOfAllParent(purModel.getUnitModel())*purModel.getRetQty());
+           for(InventoryMasterModel invMasterModel : lstInvMaster){
+            invMasterModel.setOutQty(unitEJB.getUnitCountOfAllParent(purModel.getUnitModel().getUnitId())*purModel.getRetQty());
             invMasterModel.setInvReceipt(purModel.getInventoryReceiptModel());
             invMasterModel.setTotalCost(purModel.getTotalCost());
             
             //invMasterModel.setUnitSalePrice(purModel.getSellingPrice());
             
             lstMaster.add(invMasterModel);
+           }
         }
         
         AccHead accountHead = null;
@@ -530,9 +537,29 @@ public class SalesMB implements Serializable {
     
     public void loadCostPrice()
     {
-       
+       int remQ=0; 
          ItemProductModel itm = productEJB.find(salesDetailModel.getItemProductModel().getProductId());
-        // InventoryMasterModel invMasterModel = mast
-        //salesDetailModel.setCostPrice(itm.);
+         List<InventoryMasterModel> lstInvMaster = invMasterEJB.findbyProductId(itm.getProductId());
+         if(lstInvMaster.size() == 0)
+         {
+               addDetailMessage("No Item Found At Stock,Please Purchase first"); 
+                 return; 
+         }
+         salesDetailModel.setCostPrice(lstInvMaster.get(0).getUnitCostPrice());
+         for(InventoryMasterModel invMaster : lstInvMaster)
+         {
+             remQ = remQ+invMaster.getInQty() - invMaster.getOutQty();
+             
+         }
+         remQnty = String.valueOf(remQ)+" Pcs";
+         System.out.println("np.info.dpshkhnl.bean.sales.SalesMB.loadCostPrice()"+remQnty);
+    }
+
+    public String getRemQnty() {
+        return remQnty;
+    }
+
+    public void setRemQnty(String remQnty) {
+        this.remQnty = remQnty;
     }
 }

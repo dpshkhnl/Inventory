@@ -66,6 +66,9 @@ public class InventoryMasterModel implements Serializable {
 	@Column(name = "total_cost", nullable = false)
 	private double totalCost;
 
+        @Column(name = "unit_cost_price", nullable = false)
+	private double unitCostPrice;
+        
 	@Column(name = "unit_sale_price", nullable = false)
 	private double unitSalePrice;
 
@@ -258,6 +261,14 @@ public class InventoryMasterModel implements Serializable {
 
     public void setInvReceipt(InventoryReceiptModel invReceipt) {
         this.invReceipt = invReceipt;
+    }
+
+    public double getUnitCostPrice() {
+        return unitCostPrice;
+    }
+
+    public void setUnitCostPrice(double unitCostPrice) {
+        this.unitCostPrice = unitCostPrice;
     }
 
 	

@@ -39,7 +39,7 @@ public class UnitSettingMB  implements Serializable{
     private List<UnitModel> selectedValue; 
     private List<UnitModel> filteredValue;
     private Filter<UnitModel> filter = new Filter<>(new UnitModel());
-    
+    private boolean primaryUnit;
      public void init() {
         if(Faces.isAjaxRequest()){
            return;
@@ -102,7 +102,7 @@ public class UnitSettingMB  implements Serializable{
         this.filter = filter;
     }
     
-      public void saveRoute()
+      public void saveRoute() throws IOException
     {
         
          String msg;
@@ -114,6 +114,8 @@ public class UnitSettingMB  implements Serializable{
             msg = "Unit " + unitModel.getUnitName() + " updated successfully";
         }
         addDetailMessage(msg);
+        Faces.getFlash().setKeepMessages(true);
+            Faces.redirect("pages/admin/unit-setting/unit-setting-list.xhtml");
     }
     public boolean isNew() {
         return unitModel == null || unitModel.getUnitId()== 0;
@@ -150,5 +152,13 @@ public class UnitSettingMB  implements Serializable{
             throw new BusinessException("Provide Unit ID to load");
         }
         selectedValue.add(unitEJB.find(id));
+    }
+
+    public boolean isPrimaryUnit() {
+        return primaryUnit;
+    }
+
+    public void setPrimaryUnit(boolean primaryUnit) {
+        this.primaryUnit = primaryUnit;
     }
 }

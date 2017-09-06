@@ -45,25 +45,11 @@
                                          oncomplete="PF('selectedCars').show()" icon="fa fa-search"/>
                     </div>
 
-                    <p:splitButton value="New" action="item-category-form?faces-redirect=true"
-                                   icon="fa fa-plus"
-                                   styleClass="hidden-md hidden-lg btn-primary">
-                        <p:menuitem value="Delete Selected" action="#{itemTypeMB.delete}"
-                                    process="@this" update="@form"
-                                    disabled="#{empty itemTypeMB.selectedValue or itemTypeMB.selectedValue.size() == 0}"
-                                    icon="fa fa-trash">
-                            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>
-                        </p:menuitem>
-                        <p:menuitem value="View selected" update="@(.ui-dialog)"
-                                    oncomplete="PF('selectedCars').show()"
-                                    disabled="#{empty itemTypeMB.selectedValue or itemTypeMB.selectedValue.size() == 0}"
-                                    icon="fa fa-search"
-                        />
-                    </p:splitButton>
+                    
 
                     <p:separator/>
                     <p:dataTable widgetVar="carsTable" var="c" value="#{itemTypeMB.lstItemType}" rows="5"
-                                 rowKey="#{c.itemTypeId}" lazy="true" paginator="true"
+                                 rowKey="#{c.itemTypeId}"  paginator="true"
                                  filteredValue="#{itemTypeMB.filteredValue}"
                                  paginatorPosition="bottom" selection="#{itemTypeMB.selectedValue}"
                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
@@ -77,17 +63,7 @@
                         <p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
 
 
-                        <f:facet name="header">
-                            Find Brand by ID <p:inputText id="inptId" value="#{itemTypeMB.itemTypeModel.itemTypeId}"/>
-                            <p:spacer height="5"/>
-                            <p:commandButton id="brFind"
-                                             value="Find"
-                                             action="#{itemTypeMB.findItemTypeById(itemTypeMB.itemTypeModel.itemTypeId)}"
-                                             process="@form"
-                                             update="@form"
-                                             styleClass="btn-flat bg-black"
-                                             partialSubmit="true"/>
-                        </f:facet>
+                     
                         <p:column selectionMode="multiple" width="5%" styleClass="align-center"/>
 
                         <p:column headerText="Item Type Name" filterBy="#{c.itemTypeName}" sortBy="#{c.itemTypeName}"
